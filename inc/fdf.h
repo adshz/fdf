@@ -6,7 +6,7 @@
 /*   By: szhong <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 10:25:53 by szhong            #+#    #+#             */
-/*   Updated: 2024/07/18 10:28:19 by szhong           ###   ########.fr       */
+/*   Updated: 2024/07/24 15:30:05 by szhong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,15 @@ typedef struct s_map
 	int		max_z;
 	int		min_z;
 }	t_map;
+
+typedef struct	s_fdf
+{
+	t_map	*mapping_data;
+	void	*mlx;
+	int	win_w;
+	int	win_h;
+	void	*win;
+}	t_fdf;
 
 #endif
 
