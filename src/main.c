@@ -6,7 +6,7 @@
 /*   By: szhong <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 13:59:19 by szhong            #+#    #+#             */
-/*   Updated: 2024/07/25 14:04:35 by szhong           ###   ########.fr       */
+/*   Updated: 2024/07/25 14:19:55 by szhong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #define _GNU_SOURCE
@@ -370,96 +370,27 @@ static void parse_z_and_color(char *token, t_cartesian *point, t_map *data)
 		data->min_z = point->z;
 }
 
-typedef void	(*line_processor_t)(char *line, t_cartesian *point, int row, t_map *data);
-
-static char	*get_nextline(char **line)
+/*
+ * this function is actually quite smart
+ * it actually uses a lot of other functions to work on the same issues
+ *
+ * for example, we have `ft_strlen`, it will stop when it has the `\0` null terminator
+ * also the return value of `ft_strchr` is NULL when the targeted character isn't found
+ * if  statement will not run if the condition is not ture,
+ * so if the `ptr_nextline` was found by the `ft_strchr` then it won't be a NULL
+ * so these two conditions will be true. 
+ */
+static void	count_dimensions(char *content, t_map *data)
 {
-	char	*ptr_nextline;
+	
+	char		*line;
+	char		*ptr_nextline;
+	size_t		line_length;
 
-	ptr_nextline = ft_strchr(*line, '\n');
-	if (ptr_nextline)
-	{
-		*ptr_nextline = '\0';
-		ptr_nextline++;
-	}
-	return (ptr_nextline);
-}
-
-static void	process_line(char *line, t_map *data, line_processor_t ptr_parse_line)
-{
-	size_t	line_len;
-
-	line_len = ft_strlen(line);
-	if (line_len > 0 || data->max_m == 0)
-	{
-		if (ptr_parse_line)
-			ptr_parse_line(line, data->points[data->max_m], data->max_m, data);
-		else if (data->max_m == 0)
-			data->max_n = count_words(line, ' ');
-		data->max_m++;
-	}
-}
-
-static int	nextline_handler(char *content, t_map *data, line_processor_t ptr_parse_line)
-{
-	char	*line;
-	char	*ptr_nextline;
-
-	if (!content || !data)
-		return (-1);
-	line =  content;
+	line = content;
+	
 	while (line && *line)
 	{
-		ptr_nextline = get_nextline(&line);
-		process_line(line, data, ptr_parse_line);
-		if (ptr_nextline)
-		{
-			*(ptr_nextline - 1) = '\n';
-		}
-		else
-			break;
-	}
-	return (0);
-}
-
-
-/* unvalidated code */
-//static void	nextline_handler(char *content, t_map *data, line_processor_t ptr_parse_line)
-//{
-//	char	*line;
-//	char	*ptr_nextline;
-//	size_t	line_len;
-//
-//	line =  content;
-//	while (line && *line)
-//	{
-//		ptr_nextline = ft_strchr(line, '\n');
-//		if (ptr_nextline)
-//		{
-//			line_len = ptr_nextline - line;
-//			*ptr_nextline = '\0';
-//		}
-//		else
-//			line_len = ft_strlen(line);
-//		if (line_len > 0 || data->max_m == 0)
-//		{
-//			if (ptr_parse_line)
-//				ptr_parse_line(line, data->points[data->max_m], data->max_m, data);
-//			else
-//				if (data->max_m == 0)
-//					data->max_n = count_words(line, ' ');
-//			data->max_m++;
-//		}
-//		if (ptr_nextline)
-//		{
-//			*ptr_nextline = '\n';
-//			line = ptr_nextline + 1;
-//		}
-//		else
-//			break ;
-//	}
-//}
-/*
 		ptr_nextline = ft_strchr(line, '\n');
 		if (ptr_nextline)
 		{
@@ -481,73 +412,8 @@ static int	nextline_handler(char *content, t_map *data, line_processor_t ptr_par
 		}
 		else
 			break ;
-	---------------
-		ptr_nextline = ft_strchr(line, '\n');
-		if (ptr_nextline)
-		{
-    			line_length = ptr_nextline - line;
-			*ptr_nextline = '\0';
-		}
-		else
-			line_length = ft_strlen(line);
-		if (line_length > 0 || row == 0)
-		{
-			parse_line(line, data->points[row], row, data);
-			row++;
-		}
-		if (ptr_nextline)
-		{
-			*ptr_nextline = '\n';
-			line = ptr_nextline + 1;
-		}
-		else
-			break;
-*/
-
-/*
- * this function is actually quite smart
- * it actually uses a lot of other functions to work on the same issues
- *
- * for example, we have `ft_strlen`, it will stop when it has the `\0` null terminator
- * also the return value of `ft_strchr` is NULL when the targeted character isn't found
- * if  statement will not run if the condition is not ture,
- * so if the `ptr_nextline` was found by the `ft_strchr` then it won't be a NULL
- * so these two conditions will be true. 
- */
-//static void	count_dimensions(char *content, t_map *data)
-//{
-//	
-//	char		*line;
-//	char		*ptr_nextline;
-//	size_t		line_length;
-//
-//	line = content;
-//	
-////	while (line && *line)
-//	{
-//		ptr_nextline = ft_strchr(line, '\n');
-//		if (ptr_nextline)
-//		{
-//			line_length = ptr_nextline - line;
-//			*ptr_nextline = '\0';
-//		}
-//		else
-//			line_length = ft_strlen(line);
-//		if (line_length > 0 || data->max_m == 0)
-//		{
-//			if (data->max_m == 0)
-//				data->max_n = count_words(line, ' ');
-//			data->max_m++;
-//		}
-//		if (ptr_nextline)
-//		{
-//			*ptr_nextline = '\n';
-//			line = ptr_nextline + 1;
-//		}
-//		else
-//			break ;
-//	}
-//}
+	}
+}
 
 static void	parse_line(char *line, t_cartesian *point, int row, t_map *data)
 {
@@ -568,39 +434,39 @@ static void	parse_line(char *line, t_cartesian *point, int row, t_map *data)
 	free_arr(split);
 }
 
-//static void	parse_content(char *content, t_map *data)
-//{
-//	char		*line;
-//	char		*ptr_nextline;
-//	int		row;
-//	size_t		line_length;
-//
-//	line = content;
-//	row = 0;
-//	while (line && *line && row < data->max_m)
-//	{
-//		ptr_nextline = ft_strchr(line, '\n');
-//		if (ptr_nextline)
-//		{
-//    			line_length = ptr_nextline - line;
-//			*ptr_nextline = '\0';
-//		}
-//		else
-//			line_length = ft_strlen(line);
-//		if (line_length > 0 || row == 0)
-//		{
-//			parse_line(line, data->points[row], row, data);
-//			row++;
-//		}
-//		if (ptr_nextline)
-//		{
-//			*ptr_nextline = '\n';
-//			line = ptr_nextline + 1;
-//		}
-//		else
-//			break;
-//	}
-//}
+static void	parse_content(char *content, t_map *data)
+{
+	char		*line;
+	char		*ptr_nextline;
+	int		row;
+	size_t		line_length;
+
+	line = content;
+	row = 0;
+	while (line && *line && row < data->max_m)
+	{
+		ptr_nextline = ft_strchr(line, '\n');
+		if (ptr_nextline)
+		{
+    			line_length = ptr_nextline - line;
+			*ptr_nextline = '\0';
+		}
+		else
+			line_length = ft_strlen(line);
+		if (line_length > 0 || row == 0)
+		{
+			parse_line(line, data->points[row], row, data);
+			row++;
+		}
+		if (ptr_nextline)
+		{
+			*ptr_nextline = '\n';
+			line = ptr_nextline + 1;
+		}
+		else
+			break;
+	}
+}
 
 t_map	*parse_data(char *filepath)
 {
@@ -616,13 +482,7 @@ t_map	*parse_data(char *filepath)
 		free(data);
 		return (NULL);
 	}
-	if (nextline_handler(file_content, data, NULL) != 0)
-	{
-		free(file_content);
-		free(data);
-		return (NULL);
-	}
-//	count_dimensions(file_content, data);
+	count_dimensions(file_content, data);
 	data->points = cartesian_init(data->max_n, data->max_m);
 	if (!data->points)
 	{
@@ -630,13 +490,7 @@ t_map	*parse_data(char *filepath)
 		free(data);
 		return (NULL);
 	}
-	if (nextline_handler(file_content, data, &parse_line) != 0)
-	{
-		free_points(data->points, data->max_n);
-		free(file_content);
-		free(data);
-	}
-	//parse_content(file_content, data);
+	parse_content(file_content, data);
 	free(file_content);
 	return (data);
 }
