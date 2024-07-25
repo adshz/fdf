@@ -53,3 +53,7 @@ dkms.conf
 block/
 tags
 libft/.git/
+test/
+*.swp
+fdf
+time_fdf
