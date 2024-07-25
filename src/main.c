@@ -6,7 +6,7 @@
 /*   By: szhong <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 13:59:19 by szhong            #+#    #+#             */
-/*   Updated: 2024/07/25 14:04:35 by szhong           ###   ########.fr       */
+/*   Updated: 2024/07/25 14:14:42 by szhong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #define _GNU_SOURCE
@@ -636,7 +636,7 @@ t_map	*parse_data(char *filepath)
 		free(file_content);
 		free(data);
 	}
-	//parse_content(file_content, data);
+//	parse_content(file_content, data);
 	free(file_content);
 	return (data);
 }
