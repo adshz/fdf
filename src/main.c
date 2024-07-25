@@ -6,7 +6,7 @@
 /*   By: szhong <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 13:59:19 by szhong            #+#    #+#             */
-/*   Updated: 2024/07/25 14:19:55 by szhong           ###   ########.fr       */
+/*   Updated: 2024/07/25 16:35:38 by szhong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #define _GNU_SOURCE
@@ -18,6 +18,8 @@
 #include "fdf.h"
 #include <assert.h> 
 #include <stdio.h>
+
+#include "../minilibx-linux/mlx.h"
 
 # define HEXADECIMAL "0123456789abcdef"
 
@@ -109,12 +111,14 @@ int	get_m_rows(char *filepath)
 	return (max_m);
 }
 
-void	free_points(t_cartesian **points, int max_width)
+void	free_points(t_cartesian **points, int max_depth)
 {
 	int	i;
 
+	if (points == NULL)
+		return ;
 	i = 0;
-	while (i < max_width)
+	while (i < max_depth + 1)
 	{
 		free(points[i]);
 		i++;
@@ -144,10 +148,10 @@ void	print_map(t_cartesian **points, int max_width, int max_depth)
 	int	j;
 
 	i = 0;
-	while (i < max_width)
+	while (i < max_depth)
 	{
 		j = 0;
-		while (j < max_depth)
+		while (j < max_width)
 		{
 			printf("x is %f\ty is %f\tz is %f\tcolour is %d\n", points[i][j].x, points[i][j].y, points[i][j].z, points[i][j].colour);
 			j++;
@@ -163,26 +167,31 @@ t_cartesian	**cartesian_init(int max_width, int max_depth)
 	int		i;
 	int		j;
 
-	points = (t_cartesian **)malloc(sizeof(t_cartesian *) * max_width);
-	if ( points == NULL)
+	points = (t_cartesian **)malloc(sizeof(t_cartesian *) * (max_depth + 1)); 
+	if (points == NULL)
 		return (NULL);
 	i = 0;
-	while (i < max_width)
+	while (i < max_depth)
 	{
-		points[i]= (t_cartesian *)malloc(sizeof(t_cartesian ) * max_depth);
-		j = 0;
-		while (j < max_depth)
+		points[i]= (t_cartesian *)malloc(sizeof(t_cartesian ) * (max_width + 1));
+		if (!points[i])
 		{
-			if (!points[i])
-				return (NULL);
-			points[i][j].x = 0;
-			points[i][j].y = 0;
-			points[i][j].z = 0;
+			free_points(points, max_depth + 1);
+			return (NULL);
+		}
+		j = 0;
+		while (j < max_width)
+		{
+			points[i][j].x = 0.0f;
+			points[i][j].y = 0.0f;
+			points[i][j].z = 0.0f;
 			points[i][j].colour = 0;
 			j++;
 		}
+		points[i][max_width].x = -1;
 		i++;
 	}
+	points[max_depth] = NULL;
 	return (points);
 }
 
@@ -424,7 +433,7 @@ static void	parse_line(char *line, t_cartesian *point, int row, t_map *data)
 	if (!split)
 		return ;
 	col = 0;
-	while (split[col] && col < data->max_n)
+	while (split[col] && col < data->max_n && point[col].x != -1)
 	{
 		point[col].x = (float)col;
 		point[col].y = (float)row;
@@ -496,30 +505,50 @@ t_map	*parse_data(char *filepath)
 }
 
 #endif
-
-#include <time.h>
-#include <stdio.h>
+/* test parsing data */
+//#include <time.h>
+//#include <stdio.h>
+//
+//int	main(int argc, char *argv[])
+//{
+//	t_map	*data;
+//	int	fd;
+//	clock_t	start, end;
+//	double cpu_time_used;
+//
+//	start = clock();
+//	if (argc != 2)
+//		ft_putendl_fd("ERROR", 2);
+//	fd = open(argv[1], O_RDONLY);
+//	if (fd < 0)
+//		ft_putendl_fd("ERROR", 2);
+//	data = parse_data(argv[1]);
+//	print_map(data->points, data->max_n, data->max_m);
+//	free_points(data->points, data->max_n);
+//	free(data);
+//	ft_putendl_fd("Completed", 1);
+//	end = clock();
+//	cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+//	printf("Time taken: %f seconds\n", cpu_time_used);
+//	return (0);
+//}
 
 int	main(int argc, char *argv[])
 {
-	t_map	*data;
-	int	fd;
-	clock_t	start, end;
-	double cpu_time_used;
+	t_fdf	*fdf;
 
-	start = clock();
 	if (argc != 2)
 		ft_putendl_fd("ERROR", 2);
-	fd = open(argv[1], O_RDONLY);
-	if (fd < 0)
-		ft_putendl_fd("ERROR", 2);
-	data = parse_data(argv[1]);
-	print_map(data->points, data->max_n, data->max_m);
-	free_points(data->points, data->max_n);
-	free(data);
-	ft_putendl_fd("Completed", 1);
-	end = clock();
-	cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
-	printf("Time taken: %f seconds\n", cpu_time_used);
-	return (0);
+	fdf = (t_fdf *)malloc(sizeof(t_fdf) * 1);
+	if (fdf == NULL)
+		return (-1);
+	fdf->map_data = parse_data(argv[1]);
+	print_map(fdf->map_data->points, fdf->map_data->max_n, fdf->map_data->max_m);
+	fdf->mlx_ptr = mlx_init();
+
+	mlx_destroy_display(fdf->mlx_ptr);
+	free(fdf->mlx_ptr);
+	free_points(fdf->map_data->points, fdf->map_data->max_m);
+	free(fdf->map_data);
+	free(fdf);
 }

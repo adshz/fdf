@@ -6,25 +6,28 @@
 #    By: szhong <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/11 14:14:29 by szhong            #+#    #+#              #
-#    Updated: 2024/07/18 10:29:38 by szhong           ###   ########.fr        #
+#    Updated: 2024/07/25 15:31:53 by szhong           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		:=	fdf
 CC		:=	cc 
 CFLAGS		:=	-Wall -Werror -Werror -g
+MLX		:=	-I ./minlibx-linux 
 SRC_DIR		:=	./src
 SRCS		:=	main.c
 OBJ_DIR		:=	./obj
 OBJS		:=	$(addprefix $(OBJ_DIR)/, $(patsubst %.c, %.o, $(SRCS)))
 
 LIBFT_PATH	:=	./libft
-INCLUDE		:=	-I ./libft/inc -I ./inc
-
+ALL_LIBS	:=	-L$(LIBFT_PATH) -lft -L./minilibx-linux -lmlx -lXext -lX11 -lm
+INCLUDE		:=	-I ./libft/inc -I ./inc $(MLX)
+TAGS_FILE	:=	tags
+CTAG_FILE	:=	$(shell find src -name '*.c') $(shell find libft/src -name '*.c') $(shell find inc -name '*.h') $(shell find libft/inc -name '*.h')
 all:$(NAME) 
 
-$(NAME): $(OBJS) LIBFT
-	@$(CC) $(CFLAGS) $(OBJS) -L$(LIBFT_PATH) -lft -o $(NAME)
+$(NAME): $(OBJS) LIBFT ctag
+	@$(CC) $(CFLAGS) $(OBJS) $(ALL_LIBS) -o $(NAME) 
 	@echo "[FDF] Build Completed"
 
 LIBFT:
@@ -33,6 +36,12 @@ LIBFT:
 $(OBJ_DIR)/%.o:$(SRC_DIR)/%.c
 	@mkdir -p $(@D)
 	@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+
+mlx_lib:
+	@make -no-print-directory -C ./minilibx-linux ./configure
+
+ctag: $(TAGS_FILE)
+	@ctags -Rf $(TAGS_FILE) src inc libft/src libft/inc
 
 clean:
 	@make --no-print-directory -C $(LIBFT_PATH) clean

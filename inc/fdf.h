@@ -6,7 +6,7 @@
 /*   By: szhong <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 10:25:53 by szhong            #+#    #+#             */
-/*   Updated: 2024/07/24 15:30:05 by szhong           ###   ########.fr       */
+/*   Updated: 2024/07/25 15:24:32 by szhong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ typedef struct s_map
 
 typedef struct	s_fdf
 {
-	t_map	*mapping_data;
-	void	*mlx;
+	t_map	*map_data;
+	void	*mlx_ptr;
 	int	win_w;
 	int	win_h;
 	void	*win;
