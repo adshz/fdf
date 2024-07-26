@@ -6,7 +6,7 @@
 /*   By: szhong <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 10:25:53 by szhong            #+#    #+#             */
-/*   Updated: 2024/07/25 15:24:32 by szhong           ###   ########.fr       */
+/*   Updated: 2024/07/26 14:08:50 by szhong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef struct	s_fdf
 	void	*mlx_ptr;
 	int	win_w;
 	int	win_h;
-	void	*win;
+	void	*win_ptr;
 }	t_fdf;
 
 #endif
