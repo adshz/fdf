@@ -6,12 +6,14 @@
 /*   By: szhong <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 10:25:53 by szhong            #+#    #+#             */
-/*   Updated: 2024/07/26 14:08:50 by szhong           ###   ########.fr       */
+/*   Updated: 2024/07/29 13:13:02 by szhong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FDF_H
 # define FDF_H
+# define HEXADECIMAL "0123456789abcdef"
+# define BUFF_SIZE 4096
 
 typedef struct s_point
 {
