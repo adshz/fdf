@@ -6,7 +6,7 @@
 #    By: szhong <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/11 14:14:29 by szhong            #+#    #+#              #
-#    Updated: 2024/07/25 15:31:53 by szhong           ###   ########.fr        #
+#    Updated: 2024/07/29 16:22:48 by szhong           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,17 @@ CC		:=	cc
 CFLAGS		:=	-Wall -Werror -Werror -g
 MLX		:=	-I ./minlibx-linux 
 SRC_DIR		:=	./src
-SRCS		:=	main.c
+SRCS		:=	\
+			main.c \
+			utils/debug/debug.c \
+			utils/parse_file/get_whole_file.c \
+			utils/error_and_free.c \
+			utils/init.c \
+			utils/parse_file/parse_utils.c \
+			utils/parse_file/parse_data.c \
+			utils/parse_file/parse_line.c \
+			#utils/parse_file/read_data.c \
+
 OBJ_DIR		:=	./obj
 OBJS		:=	$(addprefix $(OBJ_DIR)/, $(patsubst %.c, %.o, $(SRCS)))
 
