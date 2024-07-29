@@ -6,7 +6,7 @@
 /*   By: szhong <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 13:59:19 by szhong            #+#    #+#             */
-/*   Updated: 2024/07/26 17:03:40 by szhong           ###   ########.fr       */
+/*   Updated: 2024/07/29 13:19:58 by szhong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #define _GNU_SOURCE
@@ -20,19 +20,6 @@
 #include <stdio.h>
 
 #include "../minilibx-linux/mlx.h"
-
-# define HEXADECIMAL "0123456789abcdef"
-
-void	free_arr(char **arr)
-{
-	int	i;
-
-	i = 0;
-	while (arr[i])
-		free(arr[i++]);
-	free(arr);
-	return ;
-}
 
 int	ft_arrlen(char **arr)
 {
@@ -63,6 +50,7 @@ static size_t	count_words(char const *s, char c)
 	return (word_count);
 }
 
+// get-next-line
 int	get_n_cols(char	*filepath)
 {
 	int	fd;
@@ -90,6 +78,7 @@ int	get_n_cols(char	*filepath)
 	return (max_n);
 }
 
+// get-next-line
 int	get_m_rows(char *filepath)
 {
 	int	fd;
@@ -111,22 +100,7 @@ int	get_m_rows(char *filepath)
 	return (max_m);
 }
 
-void	free_points(t_cartesian **points, int max_depth)
-{
-	int	i;
-
-	if (points == NULL)
-		return ;
-	i = 0;
-	while (i < max_depth + 1)
-	{
-		free(points[i]);
-		i++;
-	}
-	free(points);
-	return ;
-}
-
+// utils->init
 t_map	*map_init(void)
 {
 	t_map	*result;
@@ -142,6 +116,7 @@ t_map	*map_init(void)
 	return (result);
 }
 
+// debug
 void	print_map(t_cartesian **points, int max_width, int max_depth)
 {
 	int	i;
@@ -161,6 +136,7 @@ void	print_map(t_cartesian **points, int max_width, int max_depth)
 	return ;
 }
 
+// utils->init
 t_cartesian	**cartesian_init(int max_width, int max_depth)
 {
 	t_cartesian	**points;
@@ -275,8 +251,8 @@ t_map	*parse_data(char* filepath)
 
 #else
 //new parsing logic - read the whole file
-#define BUFF_SIZE 4096
 
+// utils-> string contact
 static char	*ft_concatenate(char *s1, char *s2)
 {
 	char	*result;
@@ -357,7 +333,7 @@ char	*get_whole_file(const char *filename)
 	return (content);
 }
 
-static void parse_z_and_color(char *token, t_cartesian *point, t_map *data)
+static void parse_z_and_colour(char *token, t_cartesian *point, t_map *data)
 {
 	char	*comma;
 
@@ -437,7 +413,7 @@ static void	parse_line(char *line, t_cartesian *point, int row, t_map *data)
 	{
 		point[col].x = (float)col;
 		point[col].y = (float)row;
-		parse_z_and_color(split[col], &point[col], data);
+		parse_z_and_colour(split[col], &point[col], data);
 		col++;
 	}
 	free_arr(split);
