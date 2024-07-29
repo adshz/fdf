@@ -6,14 +6,14 @@
 /*   By: szhong <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 10:25:53 by szhong            #+#    #+#             */
-/*   Updated: 2024/07/29 13:13:02 by szhong           ###   ########.fr       */
+/*   Updated: 2024/07/29 15:16:41 by szhong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #ifndef FDF_H
 # define FDF_H
 # define HEXADECIMAL "0123456789abcdef"
 # define BUFF_SIZE 4096
+# include <stdlib.h>
 
 typedef struct s_point
 {
@@ -41,6 +41,20 @@ typedef struct	s_fdf
 	void	*win_ptr;
 }	t_fdf;
 
+t_map	*map_init(void);
+t_cartesian	**cartesian_init(int max_width, int max_depth);
+
+
+int	ft_arrlen(char **arr);
+size_t	count_cols(char const *s, char c);
+void	free_arr(char **arr);
+void	free_points(t_cartesian **points, int max_depth);
+
+char	*ft_concatenate(char *s1, char *s2);
+char	*get_whole_file(const char *filename);
+t_map	*parse_data(char *filepath);
+
+void	print_map(t_cartesian **point, int max_width, int max_depth);
 #endif
 
 #if 0

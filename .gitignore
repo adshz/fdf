@@ -60,3 +60,4 @@ time_fdf
 src/implementation_get_whole_file.c
 src/test_file.txt
 src/test_file2.txt
+archive/
