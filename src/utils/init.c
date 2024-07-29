@@ -6,7 +6,7 @@
 /*   By: szhong <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 14:19:33 by szhong            #+#    #+#             */
-/*   Updated: 2024/07/29 15:30:46 by szhong           ###   ########.fr       */
+/*   Updated: 2024/07/29 16:03:46 by szhong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "fdf.h"
@@ -24,6 +24,7 @@ t_map	*map_init(void)
 	result->max_z = 0;
 	result->min_z = 0;
 	result->points = NULL;
+	result->current_row = 0;
 	return (result);
 }
 

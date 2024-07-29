@@ -6,7 +6,7 @@
 /*   By: szhong <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 14:49:04 by szhong            #+#    #+#             */
-/*   Updated: 2024/07/29 15:13:17 by szhong           ###   ########.fr       */
+/*   Updated: 2024/07/29 16:52:59 by szhong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "fdf.h"
@@ -24,12 +24,11 @@ void	print_map(t_cartesian **points, int max_width, int max_depth)
 		while (j < max_width)
 		{
 			printf("x is %f\ty is %f\tz is %f\tcolour is %d\n", \
-					points[i][j].x, points[i][j].y, points[i][j].z, points[i][j].colour);
+					points[i][j].x, points[i][j].y, \
+					points[i][j].z, points[i][j].colour);
 			j++;
 		}
 		i++;
 	}
 	return ;
 }
-
-

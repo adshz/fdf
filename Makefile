@@ -6,7 +6,7 @@
 #    By: szhong <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/11 14:14:29 by szhong            #+#    #+#              #
-#    Updated: 2024/07/29 14:53:01 by szhong           ###   ########.fr        #
+#    Updated: 2024/07/29 16:22:48 by szhong           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,10 +19,12 @@ SRCS		:=	\
 			main.c \
 			utils/debug/debug.c \
 			utils/parse_file/get_whole_file.c \
-			utils/parse_file/read_data.c \
 			utils/error_and_free.c \
 			utils/init.c \
-			utils/utils.c 
+			utils/parse_file/parse_utils.c \
+			utils/parse_file/parse_data.c \
+			utils/parse_file/parse_line.c \
+			#utils/parse_file/read_data.c \
 
 OBJ_DIR		:=	./obj
 OBJS		:=	$(addprefix $(OBJ_DIR)/, $(patsubst %.c, %.o, $(SRCS)))

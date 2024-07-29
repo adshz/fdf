@@ -6,7 +6,7 @@
 /*   By: szhong <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 13:27:24 by szhong            #+#    #+#             */
-/*   Updated: 2024/07/29 15:16:59 by szhong           ###   ########.fr       */
+/*   Updated: 2024/07/29 15:40:55 by szhong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "fdf.h"
@@ -16,8 +16,8 @@
 char	*ft_concatenate(char *s1, char *s2)
 {
 	char	*result;
-	int	len1;
-	int	len2;
+	int		len1;
+	int		len2;
 
 	if (!s1)
 		return (s2);
@@ -39,7 +39,7 @@ char	*ft_concatenate(char *s1, char *s2)
 	return (result);
 }
 
-static char *read_chunk(int fd, ssize_t *bytes_read)
+static char	*read_chunk(int fd, ssize_t *bytes_read)
 {
 	char	*buff;
 
@@ -56,7 +56,7 @@ static char *read_chunk(int fd, ssize_t *bytes_read)
 	return (buff);
 }
 
-static char *process_chunks(int fd)
+static char	*process_chunks(int fd)
 {
 	ssize_t		bytes_read;
 	char		*content;
@@ -82,7 +82,7 @@ static char *process_chunks(int fd)
 
 char	*get_whole_file(const char *filename)
 {
-	int	fd;
+	int		fd;
 	char	*content;
 
 	fd = open(filename, O_RDONLY);

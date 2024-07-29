@@ -6,7 +6,7 @@
 /*   By: szhong <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 10:25:53 by szhong            #+#    #+#             */
-/*   Updated: 2024/07/29 15:16:41 by szhong           ###   ########.fr       */
+/*   Updated: 2024/07/29 16:21:13 by szhong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FDF_H
@@ -30,6 +30,7 @@ typedef struct s_map
 	int		max_n;
 	int		max_z;
 	int		min_z;
+	int		current_row;
 }	t_map;
 
 typedef struct	s_fdf
@@ -53,7 +54,7 @@ void	free_points(t_cartesian **points, int max_depth);
 char	*ft_concatenate(char *s1, char *s2);
 char	*get_whole_file(const char *filename);
 t_map	*parse_data(char *filepath);
-
+void	parse_line_wrapper(char *line, t_map *data);
 void	print_map(t_cartesian **point, int max_width, int max_depth);
 #endif
 
