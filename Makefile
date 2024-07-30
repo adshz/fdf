@@ -6,7 +6,7 @@
 #    By: szhong <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/11 14:14:29 by szhong            #+#    #+#              #
-#    Updated: 2024/07/29 16:22:48 by szhong           ###   ########.fr        #
+#    Updated: 2024/07/30 13:20:54 by szhong           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,11 +32,12 @@ OBJS		:=	$(addprefix $(OBJ_DIR)/, $(patsubst %.c, %.o, $(SRCS)))
 LIBFT_PATH	:=	./libft
 ALL_LIBS	:=	-L$(LIBFT_PATH) -lft -L./minilibx-linux -lmlx -lXext -lX11 -lm
 INCLUDE		:=	-I ./libft/inc -I ./inc $(MLX)
-TAGS_FILE	:=	tags
-CTAG_FILE	:=	$(shell find src -name '*.c') $(shell find libft/src -name '*.c') $(shell find inc -name '*.h') $(shell find libft/inc -name '*.h')
+TAG_FILE	:=	tags
+CTAG_FILES := $(shell find src -name '*.c') $(shell find libft/src -name '*.c') $(shell find inc -name '*.h') $(shell find libft/inc -name '*.h')
+
 all:$(NAME) 
 
-$(NAME): $(OBJS) LIBFT ctag
+$(NAME): $(OBJS) LIBFT ctags
 	@$(CC) $(CFLAGS) $(OBJS) $(ALL_LIBS) -o $(NAME) 
 	@echo "[FDF] Build Completed"
 
@@ -50,8 +51,11 @@ $(OBJ_DIR)/%.o:$(SRC_DIR)/%.c
 mlx_lib:
 	@make -no-print-directory -C ./minilibx-linux ./configure
 
-ctag: $(TAGS_FILE)
-	@ctags -Rf $(TAGS_FILE) src inc libft/src libft/inc
+ctags: $(CTAG_FILES)
+	@ctags -R --exclude=.git --exclude=build --languages=c,c++ -f $(TAG_FILE) .
+
+$(TAGS_DIR):
+	@mkdir -p TAGS_FILE
 
 clean:
 	@make --no-print-directory -C $(LIBFT_PATH) clean
@@ -63,7 +67,8 @@ fclean: clean
 	@echo "[FDF] Everything Removed"
 	@echo "========Project Reset========"
 	@rm -f $(NAME)
+	@rm -f $(TAG_FILE)
 
 re: fclean all
 
-.PHONY: all clean fclean re LIBFT
+.PHONY: all clean fclean re LIBFT ctags
