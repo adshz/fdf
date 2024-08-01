@@ -6,7 +6,7 @@
 #    By: szhong <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/11 14:14:29 by szhong            #+#    #+#              #
-#    Updated: 2024/07/30 13:20:54 by szhong           ###   ########.fr        #
+#    Updated: 2024/08/01 11:26:10 by szhong           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,6 +56,9 @@ ctags: $(CTAG_FILES)
 
 $(TAGS_DIR):
 	@mkdir -p TAGS_FILE
+
+run:
+	@./fdf ./maps/42.fdf
 
 clean:
 	@make --no-print-directory -C $(LIBFT_PATH) clean

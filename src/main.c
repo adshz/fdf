@@ -6,7 +6,7 @@
 /*   By: szhong <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 13:59:19 by szhong            #+#    #+#             */
-/*   Updated: 2024/07/30 16:56:24 by szhong           ###   ########.fr       */
+/*   Updated: 2024/08/01 11:38:30 by szhong           ###   ########.fr       */
 /*                                                                            */ 
 /* ************************************************************************** */
 #define _GNU_SOURCE
@@ -23,130 +23,6 @@
 
 #define WINDOW_WIDTH 1680 
 #define WINDOW_HEIGHT 980
-
-void	draw_pixel(t_fdf *data, int x, int y, int color)
-{
-	mlx_pixel_put(data->mlx_ptr, data->win_ptr, x, y, color);
-}
-
-//int	calculate_color(int x, int y)
-//{
-//	float	progress;
-//	int	red, green, blue;
-//	float	tmp;
-//
-//	progress =(float )(x + y) / (WINDOW_WIDTH + WINDOW_HEIGHT - 2);
-//	red = (int)(255 * progress);
-//	green = (int)(255 * (1 - progress));
-//	tmp = 0.5 - progress;
-//	if (tmp < 0)
-//		tmp = -tmp;
-//	blue = (int)(255 * tmp * 2);
-//	return ((red << 16) | (green << 8)| blue);
-//}
-
-void	draw_diagonal(t_fdf *data)
-{
-	int	x, y;
-	int	color;
-	float	slope;
-
-
-	slope = (float )(WINDOW_HEIGHT - 1) / (WINDOW_WIDTH - 1);
-	x = 0;
-	while (x < WINDOW_WIDTH )
-	{
-		y = (int)(x * slope);
-		if ( y < WINDOW_HEIGHT)
-		{
-			//color = calculate_color(x, y);
-			color = ft_atoi_base("0x00FFFFFF", HEXADECIMAL);
-			draw_pixel(data, x , y , color);
-		}
-		x++;
-	}
-}
-
-//void	render_data(t_fdf *fdf)
-//{
-//	int	row;
-//	int	col;
-//	float	draw_x;
-//	float	draw_y;
-//	int	color;
-//	int	scale;
-//	int	iso_x;
-//	int	iso_y;
-//	int	offset_x;	
-//	int	offset_y;
-//
-//	row = 0;
-//	offset_x = WINDOW_WIDTH / 2;
-//	offset_y = WINDOW_HEIGHT / 2;
-//	scale = 30;
-//	color = 0xFF0000;
-//	while (row < fdf->map_data->max_m)
-//	{
-//		col = 0;
-//		while (col < fdf->map_data->max_n)
-//		{
-//			int z  = fdf->map_data->points[row][col].z;
-//			iso_x = (col - row) * cos(0.523599);
-//			iso_y = -z + (col + row) * sin(0.523599);
-//			draw_x = iso_x * scale + offset_x;
-//			draw_y = iso_y * scale + offset_y;
-//			printf("Drawing point at (%f, %f) with color %d\n", draw_x, draw_y, color);
-//			mlx_pixel_put(fdf->mlx_ptr, fdf->win_ptr, draw_x, draw_y, color);
-//			col++;
-//		}
-//		row++;
-//	}
-//}
-
-// it is a great function understand how the draw descrete points from parsed data
-//void render_data(t_fdf *fdf)
-//{
-//    int row;
-//    int col;
-//    int scale;
-//    int offset_x;
-//    int offset_y;
-//    int x;
-//    int y;
-//    int z;
-//    int iso_x;
-//    int iso_y;
-//    int draw_x;
-//    int draw_y;
-//    int color;
-//
-//    row = 0;
-//    scale = 30;
-//    offset_x = WINDOW_WIDTH / 2;
-//    offset_y = WINDOW_HEIGHT / 4;
-//
-//    while (row < fdf->map_data->max_m)
-//    {
-//        col = 0;
-//        while (col < fdf->map_data->max_n)
-//        {
-//            x = col * scale;
-//            y = row * scale;
-//            z = fdf->map_data->points[row][col].z * scale / 10;
-//            iso_x = (x - y) * cos(0.523599);
-//            iso_y = -z + (x + y) * sin(0.523599);
-//            draw_x = iso_x + offset_x;
-//            draw_y = iso_y + offset_y;
-//            if (z == 0)
-//                color = 0xFFFFFF;
-//            else
-//                color = 0xFF0000;
-//            mlx_pixel_put(fdf->mlx_ptr, fdf->win_ptr, draw_x, draw_y, color);
-//            col++;
-//        }
-//        row++;
-//    }
-//}
 
 void	draw_line(t_fdf *fdf, int x0, int y0, int x1, int y1, int color)
 {
@@ -238,6 +114,25 @@ void draw_vertical_line(t_fdf *fdf, int row, int col, int scale, int offset_x, i
     draw_line(fdf, iso_x1, iso_y1, iso_x2, iso_y2, color);
 }
 
+static void	get_offsets(t_fdf *fdf, int scale, int *offset_x, int *offset_y)
+{
+	double	cos_angle;
+	double	sin_angle;
+	int	map_width;
+	int	map_height;
+	int	max_x;
+	int	max_y;
+
+	cos_angle = cos(0.523599);
+	sin_angle = sin(0.523599);
+	map_width = fdf->map_data->max_n * scale;
+	map_height = fdf->map_data->max_m * scale;
+	max_x = (int)((map_width - map_height) * cos_angle);
+	max_y = (int)((map_width + map_height) * sin_angle);
+	*offset_x = (WINDOW_WIDTH - max_x) / 2;
+	*offset_y = (WINDOW_HEIGHT - max_y) /2;
+}
+
 void render_data(t_fdf *fdf)
 {
     int row;
@@ -248,9 +143,9 @@ void render_data(t_fdf *fdf)
 
     row = 0;
     scale = 30;
-    offset_x = WINDOW_WIDTH / 2;
-    offset_y = WINDOW_HEIGHT / 4;
-
+    offset_x = 0;
+    offset_y = 0;
+    get_offsets(fdf, scale, &offset_x, &offset_y);
     while (row < fdf->map_data->max_m)
     {
         col = 0;
@@ -286,7 +181,7 @@ int	main(int argc, char *argv[])
 		free(fdf->map_data);
 		return (-1);
 	}
-	fdf->win_ptr = mlx_new_window(fdf->mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "TESTING");
+	fdf->win_ptr = mlx_new_window(fdf->mlx_ptr, WINDOW_WIDTH -1 , WINDOW_HEIGHT - 1, "TESTING");
 	if (NULL == fdf->win_ptr)
 	{
 		mlx_destroy_display(fdf->mlx_ptr);
