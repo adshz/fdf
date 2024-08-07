@@ -6,7 +6,7 @@
 #    By: szhong <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/11 14:14:29 by szhong            #+#    #+#              #
-#    Updated: 2024/08/01 11:26:10 by szhong           ###   ########.fr        #
+#    Updated: 2024/08/01 15:47:43 by szhong           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,8 @@ SRCS		:=	\
 			utils/parse_file/parse_utils.c \
 			utils/parse_file/parse_data.c \
 			utils/parse_file/parse_line.c \
+			utils/utils.c \
+			utils/key_handler.c \
 			#utils/parse_file/read_data.c \
 
 OBJ_DIR		:=	./obj

@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parse_utils.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: szhong <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/29 16:19:07 by szhong            #+#    #+#             */
-/*   Updated: 2024/07/29 16:21:20 by szhong           ###   ########.fr       */
-/*                                                                            */
+/*																			  */
+/*														  :::	   ::::::::   */
+/*	 parse_utils.c										:+:		 :+:	:+:   */
+/*													  +:+ +:+		  +:+	  */
+/*	 By: szhong <marvin@42.fr>						+#+  +:+	   +#+		  */
+/*												  +#+#+#+#+#+	+#+			  */
+/*	 Created: 2024/07/29 16:19:07 by szhong			   #+#	  #+#			  */
+/*	 Updated: 2024/08/01 11:50:32 by szhong			  ###	########.fr		  */
+/*																			  */
 /* ************************************************************************** */
 #include "fdf.h"
 
@@ -38,4 +38,23 @@ size_t	count_cols(char const *s, char c)
 		}
 	}
 	return (word_count);
+}
+
+void	move_origin(t_map *data)
+{
+	int	abc_x;
+	int	abc_y;
+
+	abc_y = 0;
+	while (abc_y < data->max_m)
+	{
+		abc_x = 0;
+		while (abc_x < data->max_n)
+		{
+			data->points[abc_y][abc_x].x -= data->max_n / 2;
+			data->points[abc_y][abc_x].y -= data->max_m / 2;
+			abc_x++;
+		}
+		abc_y++;
+	}
 }
