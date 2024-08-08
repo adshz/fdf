@@ -6,7 +6,7 @@
 /*   By: szhong <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 10:25:53 by szhong            #+#    #+#             */
-/*   Updated: 2024/08/06 15:30:50 by szhong           ###   ########.fr       */
+/*   Updated: 2024/08/08 18:05:13 by szhong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FDF_H
@@ -19,11 +19,22 @@
 # include <stdio.h>
 # include <math.h>
 # include "../minilibx-linux/mlx.h"
+# include "libft.h"
 # define WINDOW_WIDTH 1680 
 # define WINDOW_HEIGHT 980
 # define PIXEL_COUNTS 1646400
 
-# define DEFAULT_BACKGROUND 0xEAF2F1
+# define DEFAULT_BACKGROUND 0x191970
+# define DEFAULT_COLOUR 0xFFFFFF
+# define ANG_30	0.52359877
+# define ANG_45 0.78539816
+
+typedef enum e_projection
+{
+	ISOMETRIC,
+	PERSPECTIVE,
+	TOP
+}	t_projection_type;
 
 typedef	struct	s_colour
 {
@@ -31,8 +42,8 @@ typedef	struct	s_colour
 	{
 		struct
 		{
-			unsigned int	start:24;
-			unsigned int	end:24;
+			unsigned int	start_colour:24;
+			unsigned int	end_colour:24;
 		};
 		struct
 		{
@@ -81,13 +92,13 @@ typedef struct	s_img
 	int		line_len;
 	int		endian;
 	char	*mem_addr;
-	t_line	*line;
+	t_line	*line_segment;
 }	t_img;
 
 typedef struct s_display
 {
-	int	projection;
-	int	colour_pallet;
+	t_projection_type	projection;
+	bool	colour_pallet;
 	float	scale_factor;
 	float	scale_z;
 	float	cam_position_x;
@@ -136,6 +147,22 @@ void	clean_free(t_fdf *fdf);
 void	key_close(t_fdf *fdf);
 int	esc_close(int keycode, t_fdf *fdf);
 int	click_close(t_fdf *fdf);
+
+void	render_data(t_fdf *fdf);
+
+void	move_origin(t_map *data);
+
+t_colour	*colour_init(t_cartesian start, t_cartesian end);
+int	get_colour(t_colour *colour, int i_line, int line_size);
+void	apply_colours(t_fdf *fdf, t_cartesian *point);
+
+
+void	rotate(t_cam *cam, t_line *line);
+void	project(t_cam *cam, t_line *line);
+void	x_rotation(t_cam *cam, t_line *line);
+void	transform(t_cam *cam, t_line *line);
+
+
 #endif
 
 #if 0

@@ -11,13 +11,6 @@
 /* ************************************************************************** */
 #include "fdf.h"
 
-typedef enum e_projection
-{
-	ISOMETRIC,
-	PERSPECTIVE,
-	TOP
-}	t_projection;
-
 typedef struct s_proj_params
 {
 	float	*x;
@@ -37,22 +30,22 @@ static void	isometric(t_proj_params p)
 	*p.y = tmp_y;
 }
 
-static void	perspective(t_prjoj_params p)
+static void	perspective(t_proj_params p)
 {
 	float	z;
 	float	tmp_x;
 	float	tmp_y;
 
 	z = *p.z + p.transform_z;
-	tmp_x = *px / z;
-	tmp_y = *py / z;
-	*p.x = tmp_x * p.tranform_z;
+	tmp_x = *p.x / z;
+	tmp_y = *p.y / z;
+	*p.x = tmp_x * p.transform_z;
 	*p.y = -tmp_y * p.transform_z;
 }
 
-static void	project_point(t_cartesian *point, t_projection type, float transform_z)
+static void	project_point(t_cartesian *point, t_projection_type proj, float transform_z)
 {
-	t_proj_parms	p;
+	t_proj_params	p;
 
 	p.x = &point->x;
 	p.y = &point->y;
@@ -72,7 +65,7 @@ void	project(t_cam *cam, t_line *line)
 		return ;
 	rotated_line = *line;
 	x_rotation(cam, &rotated_line);
-	project_point(&rotated_line->start, cam->projection, line->transform_z);
-	project_point(&rotated_line->end, cam->projection, line->transform_z);
+	project_point(&(rotated_line.start), cam->projection, rotated_line.transform_z);
+	project_point(&(rotated_line.end), cam->projection, rotated_line.transform_z);
 	*line = rotated_line;
 }

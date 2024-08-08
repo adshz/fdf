@@ -6,13 +6,13 @@
 #    By: szhong <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/11 14:14:29 by szhong            #+#    #+#              #
-#    Updated: 2024/08/01 15:47:43 by szhong           ###   ########.fr        #
+#    Updated: 2024/08/08 15:09:32 by szhong           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		:=	fdf
 CC		:=	cc 
-CFLAGS		:=	-Wall -Werror -Werror -g
+CFLAGS		:=	-Wall -Werror -Werror -Wno-unused-function -g
 MLX		:=	-I ./minlibx-linux 
 SRC_DIR		:=	./src
 SRCS		:=	\
@@ -26,7 +26,11 @@ SRCS		:=	\
 			utils/parse_file/parse_line.c \
 			utils/utils.c \
 			utils/key_handler.c \
-			#utils/parse_file/read_data.c \
+			utils/render_data.c \
+			utils/rotate.c \
+			utils/project.c \
+			utils/transform.c \
+			utils/colour_handler.c 
 
 OBJ_DIR		:=	./obj
 OBJS		:=	$(addprefix $(OBJ_DIR)/, $(patsubst %.c, %.o, $(SRCS)))

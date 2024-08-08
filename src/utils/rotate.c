@@ -71,5 +71,5 @@ void	rotate(t_cam *cam, t_line *line)
 {
 	rotate_axis(line, cam->alpha, X_AXIS);
 	rotate_axis(line, cam->beta, Y_AXIS);
-	rotate_axis(line, cam->gemma, Z_AXIS);
+	rotate_axis(line, cam->gamma, Z_AXIS);
 }

@@ -21,8 +21,8 @@ t_colour	*colour_init(t_cartesian start, t_cartesian end)
 	colour = malloc(sizeof(t_colour));
 	if (!colour)
 		return (NULL);
-	colour->start_colour = start.colour;
-	colour->end_colour = end.colour;
+	colour->start_colour = start.colour & 0xFFFFFF;
+	colour->end_colour = end.colour & 0xFFFFFF;
 	colour->delta_r = ((end.colour >> 16) & 0xFF) - ((start.colour >> 16) & 0xFF);
 	colour->delta_g = ((end.colour >> 8) & 0xFF) - ((start.colour >> 8) & 0xFF);
 	colour->delta_b = (end.colour & 0xFF) - (start.colour & 0xFF);
@@ -69,9 +69,9 @@ static int	interpolate_colour(int colour_a, int colour_b, float factor)
 	int	g;
 	int	b;
 
-	r = interpolate_component((colour_a >> 16) & 0xFF, (colour_b >> 16) && 0xFF, factor);
-	g = interpolate_component((colour_a >> 8) & 0xFF, (colour_b >> 8) && 0xFF, factor);
-	b = interpolate_component((colour_a) & 0xFF, (colour_b) && 0xFF, factor);
+	r = interpolate_component((colour_a >> 16) & 0xFF, (colour_b >> 16) & 0xFF, factor);
+	g = interpolate_component((colour_a >> 8) & 0xFF, (colour_b >> 8) & 0xFF, factor);
+	b = interpolate_component((colour_a) & 0xFF, (colour_b) & 0xFF, factor);
 
 	return ((r << 16) | (g << 8) | b);
 }
@@ -110,21 +110,21 @@ static int	calculate_colour(float factor)
 
 static int	get_point_colour(t_fdf *fdf, t_cartesian *point)
 {
-	float	factor
-	int		colour_vaule;
+	float	factor;
+	int		value_colour;
 	t_map	*map_file;
 
 	map_file = fdf->map_data;
 	if (map_file->max_z == map_file->min_z)
 		return (MID_COLOUR);
 	factor = (float )(point->z - map_file->min_z) / (map_file->max_z - map_file->min_z);
-	colour_value = calculate_colour(factor);
-	return (colour_value);
+	value_colour = calculate_colour(factor);
+	return (value_colour);
 }
 
 void	apply_colours(t_fdf *fdf, t_cartesian *point)
 {
-	if (fdf->cam_ptr->collour_pallet == false)
+	if (fdf->cam_ptr->colour_pallet == false)
 	{
 		if (point->colour == -1)
 			point->colour = DEFAULT_COLOUR;

@@ -38,18 +38,23 @@ static void	translate_point(t_transform_params *p)
 	*p->y += p->cam_position_y;
 }
 
+static void	transform_point(t_transform_params *p)
+{
+	apply_transform(p, scale_point);
+	apply_transform(p, translate_point);
+}
+
 void	transform(t_cam *cam, t_line *line)
 {
 	t_transform_params	start;
 	t_transform_params	end;
 
+
 	start =(t_transform_params){&line->start.x, &line->start.y, \
 		cam->scale_factor, cam->cam_position_x, cam->cam_position_y};
 	end = (t_transform_params){&line->end.x, &line->end.y, \
 		cam->scale_factor, cam->cam_position_x, cam->cam_position_y};
-	apply_transform(&start, scale_point);
-	apply_transform(&end, scale_point);
-	apply_transform(&start, translate_point);
-	apply_transform(&end, translate_point);
+	transform_point(&start);
+	transform_point(&end);
 }
 

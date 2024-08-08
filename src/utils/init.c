@@ -73,7 +73,7 @@ t_img	*img_init(void	*mlx)
 	img->img_buff = mlx_new_image(mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
 	img->mem_addr = mlx_get_data_addr(img->img_buff, &img->bits_per_pixel, \
 			&img->line_len, &img->endian);
-	img->line = NULL;
+	img->line_segment = NULL;
 	return (img);
 }
 
@@ -84,18 +84,32 @@ float	get_render_scale(t_map *data)
 	float	scale;
 	float	adjusted_scale;
 
-	scale_x = WINDOW_WIDTH / data->max_n;
-	scale_y = WINDOW_HEIGHT / data->max_m;
+	scale_x = (float )WINDOW_WIDTH / data->max_n;
+	scale_y = (float )WINDOW_HEIGHT / data->max_m;
 	if (scale_x < scale_y)
 		scale = scale_x;
 	else
 		scale = scale_y;
 	if (scale < MIN_SCALE)
 		adjusted_scale = MIN_SCALE;
-	else
-		adjusted_scale = scale / SCALE_DIVISOR;
-	adjusted_scale = floor(adjusted_scale);
+	if (scale > 50)
+		adjusted_scale = 50;
 	return (adjusted_scale);
+}
+
+static void adjust_scale_and_center(t_fdf *fdf)
+{
+    float scale_x;
+    float scale_y;
+    float scale;
+
+    scale_x = (WINDOW_WIDTH * 0.8) / 18.0;  // 18 is the range of x (-9 to 9)
+    scale_y = (WINDOW_HEIGHT * 0.8) / 10.0; // 10 is the range of y (-5 to 5)
+    scale = (scale_x < scale_y) ? scale_x : scale_y;
+
+    fdf->cam_ptr->scale_factor = scale;
+    fdf->cam_ptr->cam_position_x = WINDOW_WIDTH / 2;
+    fdf->cam_ptr->cam_position_y = WINDOW_HEIGHT / 2;
 }
 
 t_cam	*cam_init(t_map *data)
@@ -105,10 +119,10 @@ t_cam	*cam_init(t_map *data)
 	cam = (t_cam *)ft_calloc(1, sizeof(t_cam));
 	if (NULL == cam)
 		return (NULL);
-	cam->projection = 1;
+	cam->projection = ISOMETRIC;
 	cam->colour_pallet = false;
 	cam->scale_factor = get_render_scale(data);
-	cam->scale_z = 1;
+	cam->scale_z = cam->scale_factor * 0.1;
 	cam->cam_position_x = WINDOW_WIDTH / 2;
 	cam->cam_position_y = WINDOW_HEIGHT / 2;
 	cam->alpha = 0;
@@ -148,11 +162,12 @@ t_fdf	*fdf_init(char	*filepath)
 		exit(1);
 	}
 	fdf->map_data = parse_data(filepath);
-	fdf->map_data = move_origin(fdf->map_data);
+	move_origin(fdf->map_data);
 	fdf->mlx_ptr = mlx_init();
 	fdf->win_ptr = mlx_new_window(fdf->mlx_ptr, WINDOW_WIDTH , WINDOW_HEIGHT, "TESTING");
 	fdf->img_ptr = img_init(fdf->mlx_ptr);
 	fdf->cam_ptr = cam_init(fdf->map_data);
-	clean_up(&fdf);
+	if (!fdf->img_ptr || !fdf->cam_ptr)
+		clean_up(&fdf);
 	return (fdf);
 }
