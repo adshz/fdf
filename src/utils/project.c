@@ -10,6 +10,7 @@
 /*																			  */
 /* ************************************************************************** */
 #include "fdf.h"
+#include <float.h>
 
 typedef struct s_proj_params
 {
@@ -64,8 +65,25 @@ void	project(t_cam *cam, t_line *line)
 	if (cam->projection == TOP)
 		return ;
 	rotated_line = *line;
+	printf("Project - Before rotation: Start(%.2f, %.2f, %.2f), End(%.2f, %.2f, %.2f)\n",
+		rotated_line.start.x, rotated_line.start.y, rotated_line.start.z,
+		rotated_line.end.x, rotated_line.end.y, rotated_line.end.z);
+
+	
 	x_rotation(cam, &rotated_line);
+
+	printf("Project - After rotation: Start(%.2f, %.2f, %.2f), End(%.2f, %.2f, %.2f)\n",
+		rotated_line.start.x, rotated_line.start.y, rotated_line.start.z,
+		rotated_line.end.x, rotated_line.end.y, rotated_line.end.z);
+
+
 	project_point(&(rotated_line.start), cam->projection, rotated_line.transform_z);
 	project_point(&(rotated_line.end), cam->projection, rotated_line.transform_z);
+	
+
+	printf("Project - After projection: Start(%.2f, %.2f, %.2f), End(%.2f, %.2f, %.2f)\n",
+		rotated_line.start.x, rotated_line.start.y, rotated_line.start.z,
+		rotated_line.end.x, rotated_line.end.y, rotated_line.end.z);
 	*line = rotated_line;
+
 }

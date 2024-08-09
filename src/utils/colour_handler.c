@@ -131,5 +131,4 @@ void	apply_colours(t_fdf *fdf, t_cartesian *point)
 	}
 	else
 		point->colour = get_point_colour(fdf, point);
-
 }

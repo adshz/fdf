@@ -12,6 +12,7 @@
 #include "fdf.h"
 #include "libft.h"
 #include <math.h>
+#include <float.h>
 # define MIN_SCALE 3
 # define SCALE_DIVISOR 1.5
 
@@ -77,39 +78,26 @@ t_img	*img_init(void	*mlx)
 	return (img);
 }
 
-float	get_render_scale(t_map *data)
+float	min(float a, float b)
+{
+	if (a < b)
+		return (a);
+	else
+		return (b);
+}
+
+float	scale_to_fit(t_map *map)
 {
 	float	scale_x;
 	float	scale_y;
-	float	scale;
-	float	adjusted_scale;
+	float	scale_factor;
 
-	scale_x = (float )WINDOW_WIDTH / data->max_n;
-	scale_y = (float )WINDOW_HEIGHT / data->max_m;
-	if (scale_x < scale_y)
-		scale = scale_x;
-	else
-		scale = scale_y;
-	if (scale < MIN_SCALE)
-		adjusted_scale = MIN_SCALE;
-	if (scale > 50)
-		adjusted_scale = 50;
-	return (adjusted_scale);
-}
-
-static void adjust_scale_and_center(t_fdf *fdf)
-{
-    float scale_x;
-    float scale_y;
-    float scale;
-
-    scale_x = (WINDOW_WIDTH * 0.8) / 18.0;  // 18 is the range of x (-9 to 9)
-    scale_y = (WINDOW_HEIGHT * 0.8) / 10.0; // 10 is the range of y (-5 to 5)
-    scale = (scale_x < scale_y) ? scale_x : scale_y;
-
-    fdf->cam_ptr->scale_factor = scale;
-    fdf->cam_ptr->cam_position_x = WINDOW_WIDTH / 2;
-    fdf->cam_ptr->cam_position_y = WINDOW_HEIGHT / 2;
+	scale_x = WINDOW_WIDTH / map->max_n;
+	scale_y = WINDOW_HEIGHT / map->max_m;
+	scale_factor = min(scale_x, scale_y);
+	if (scale_factor < 4)
+		return (2);
+	return (scale_factor / 2);
 }
 
 t_cam	*cam_init(t_map *data)
@@ -121,13 +109,13 @@ t_cam	*cam_init(t_map *data)
 		return (NULL);
 	cam->projection = ISOMETRIC;
 	cam->colour_pallet = false;
-	cam->scale_factor = get_render_scale(data);
-	cam->scale_z = cam->scale_factor * 0.1;
+	cam->scale_factor = scale_to_fit(data);
+	cam->scale_z = 1;
 	cam->cam_position_x = WINDOW_WIDTH / 2;
 	cam->cam_position_y = WINDOW_HEIGHT / 2;
-	cam->alpha = 0;
-	cam->beta = 0;
-	cam->gamma = 0;
+	cam->alpha = 0.523598775;
+	cam->beta = 0.0;
+	cam->gamma = 0.785398163;
 	return (cam);
 }
 

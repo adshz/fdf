@@ -29,6 +29,9 @@
 # define ANG_30	0.52359877
 # define ANG_45 0.78539816
 
+
+
+
 typedef enum e_projection
 {
 	ISOMETRIC,
