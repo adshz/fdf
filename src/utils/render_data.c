@@ -136,63 +136,148 @@ static float	absolute(float nbr)
 		return (nbr);
 }
 
-void	draw_line_bresenham(t_fdf *fdf, t_cartesian start, t_cartesian end)
+static void init_line_params(t_line_params *params, t_cartesian start, t_cartesian end)
 {
-	float	x_step;
-	float	y_step;
-	int		max_steps;
-	int		i_line;
-	t_colour	*color;
-
-	x_step = end.x - start.x;
-	y_step = end.y - start.y;
-	max_steps = (int)max(absolute(x_step), absolute(y_step));
-	x_step /= max_steps;
-	y_step /= max_steps;
-	color = colour_init(start, end);
-	if (!color)
-		clean_free(fdf);
-	i_line = 0;
-	while (i_line < max_steps)
-	{
-		start.colour = get_colour(color, i_line++, max_steps);
-		if (start.x > 0 && start.y > 0 && start.x < WINDOW_WIDTH && start.y < \
-				WINDOW_HEIGHT)
-			set_pixel_colour(fdf->img_ptr, start.x, start.y, start.colour);
-		start.x += x_step;
-		start.y += y_step;
-	}
-	free(color);
+    params->dx = abs((int)end.x - (int)start.x);
+    params->dy = -abs((int)end.y - (int)start.y);
+    params->sx = -1;
+    params->sy = -1;
+    if (start.x < end.x)
+        params->sx = 1;
+    if (start.y < end.y)
+        params->sy = 1;
+    params->err = params->dx + params->dy;
+    params->x = (int)start.x;
+    params->y = (int)start.y;
+    params->max_steps = max(abs(params->dx), abs(params->dy));
+    params->current_step = 0;
 }
 
-//static void	draw_line_bresenham(t_fdf *fdf, t_cartesian start, t_cartesian end)
-//{
-//	float		dx;
-//	float		dy;
-//	int			max_steps;
-//	int			line_idx;
-//	t_colour	*colour;
-//
-//	dx = abs((int)end.x - (int)start.x);
-//	dy = abs((int)end.y - (int)start.y);
-//	max_steps = (int)max(dx, dy);
-//	dx /= max_steps;
-//	dy /= max_steps;
-//	colour = colour_init(start, end);
-//	if (!colour)
-//		clean_free(fdf);
-//	line_idx = 0;
-//	while (line_idx < max_steps)
-//	{
-//		start.colour =  get_colour(colour, line_idx++, max_steps);
-//		if (start.x > 0 && start.y > 0 && start.x < WINDOW_WIDTH \
-//				&& start.y < WINDOW_HEIGHT)
-//			set_pixel_colour(fdf->img_ptr, start.x , start.y, start.colour);
-//		start.x += dx;
-//		start.y += dy;
-//	}
-//	free(colour);
-//}
+
+static void draw_pixel(t_fdf *fdf, t_line_params *params, t_colour *colour)
+{
+    int current_colour;
+
+    current_colour = get_colour(colour, params->current_step, params->max_steps);
+    if (params->x >= 0 && params->y >= 0 && params->x < WINDOW_WIDTH && params->y < WINDOW_HEIGHT)
+        set_pixel_colour(fdf->img_ptr, params->x, params->y, current_colour);
+}
+
+
+static void update_line_params(t_line_params *params)
+{
+    int e2;
+
+    e2 = 2 * params->err;
+    if (e2 >= params->dy)
+    {
+        params->err += params->dy;
+        params->x += params->sx;
+    }
+    if (e2 <= params->dx)
+    {
+        params->err += params->dx;
+        params->y += params->sy;
+    }
+    params->current_step++;
+}
+
+static void draw_line_bresenham(t_fdf *fdf, t_cartesian start, t_cartesian end)
+{
+    t_line_params params;
+    t_colour *colour;
+
+    init_line_params(&params, start, end);
+    colour = colour_init(start, end);
+    if (!colour)
+        clean_free(fdf);
+    while (1)
+    {
+        draw_pixel(fdf, &params, colour);
+        if (params.x == (int)end.x && params.y == (int)end.y)
+            break;
+        update_line_params(&params);
+    }
+    free(colour);
+}
+// void	draw_line_bresenham(t_fdf *fdf, int x0, int y0, int x1, int y1, int colour_value)
+// {
+// 	int	dx;
+// 	int	dy;
+// 	int	sx;
+// 	int	sy;
+// 	int	err;
+// 	int	e2;
+// 	t_colour	*colour;
+// 	int	max_steps;
+// 	int	line_idx;
+
+// 	dx = abs(x1 - x0);
+// 	dy = abs(y1 - y0);
+// 	sx = -1;
+// 	sy = -1;
+// 	max_steps = (int)max(absolute(dx), absolute(dy));
+// 	if (x0 < x1)
+// 		sx = 1;
+// 	if (y0 < y1)
+// 		sy = 1;
+// 	err = dx - dy;
+// 	colour = colour_init(fdf->img_ptr->line_segment->start, fdf->img_ptr->line_segment->end);
+// 	if (!colour)
+//  		clean_free(fdf);
+// 	line_idx = 0;
+// 	while (line_idx < max_steps)
+// 	{
+//  		colour_value = get_colour(colour, line_idx++, max_steps);
+//  		if (x0 > 0 && y0 > 0 && x0 < WINDOW_WIDTH && y0 < \
+//  				WINDOW_HEIGHT)
+//  			set_pixel_colour(fdf->img_ptr, x0, y0, colour_value);
+// 		if (x0 == x1 && y0 == y1)
+// 			break ;
+// 		e2 = 2 * err;
+// 		if (e2 > -dy)
+// 		{
+// 			err -= dy;
+// 			x0 += sx;
+// 		}
+// 		if (e2 < dx)
+// 		{
+// 			err += dx;
+// 			y0 += sy;
+// 		}
+
+// 	}
+// }
+
+// to be aborted!
+// void	draw_line_bresenham(t_fdf *fdf, t_cartesian start, t_cartesian end)
+// {
+// 	float	x_step;
+// 	float	y_step;
+// 	int		max_steps;
+// 	int		i_line;
+// 	t_colour	*color;
+
+// 	x_step = end.x - start.x;
+// 	y_step = end.y - start.y;
+// 	max_steps = (int)max(absolute(x_step), absolute(y_step));
+// 	x_step /= max_steps;
+// 	y_step /= max_steps;
+// 	color = colour_init(start, end);
+// 	if (!color)
+// 		clean_free(fdf);
+// 	i_line = 0;
+// 	while (i_line < max_steps)
+// 	{
+// 		start.colour = get_colour(color, i_line++, max_steps);
+// 		if (start.x > 0 && start.y > 0 && start.x < WINDOW_WIDTH && start.y < \
+// 				WINDOW_HEIGHT)
+// 			set_pixel_colour(fdf->img_ptr, start.x, start.y, start.colour);
+// 		start.x += x_step;
+// 		start.y += y_step;
+// 	}
+// 	free(color);
+// }
 
 static void	draw_line_segment(t_fdf *fdf, t_cartesian start, t_cartesian end)
 {
@@ -232,8 +317,13 @@ static void	draw_line_segment(t_fdf *fdf, t_cartesian start, t_cartesian end)
            fdf->img_ptr->line_segment->end.z, 
            fdf->img_ptr->line_segment->end.colour);
 	printf("Calling draw_line_bresenham\n");
-	draw_line_bresenham(fdf, fdf->img_ptr->line_segment->start, \
-			fdf->img_ptr->line_segment->end);
+
+	draw_line_bresenham(fdf, fdf->img_ptr->line_segment->start, fdf->img_ptr->line_segment->end);
+	// draw_line_bresenham(fdf, fdf->img_ptr->line_segment->start.x, \
+	// fdf->img_ptr->line_segment->start.y, \
+	// fdf->img_ptr->line_segment->end.x, \
+	// fdf->img_ptr->line_segment->end.y, \
+	// fdf->img_ptr->line_segment->start.colour);
 	free(fdf->img_ptr->line_segment);
 	printf("Draw line segment end\n\n");
 }
