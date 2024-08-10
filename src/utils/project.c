@@ -24,9 +24,11 @@ static void	isometric(t_proj_params p)
 {
 	float	tmp_x;
 	float	tmp_y;
-
-	tmp_x = (*p.x - *p.y) * cos(ANG_30);
-	tmp_y = (*p.x - *p.y) * sin(ANG_30) - *p.z;
+	float	stretch_factor;
+	
+	stretch_factor = 1;
+	tmp_x = (*p.x - *p.y) * cos(ANG_30) * stretch_factor;
+	tmp_y = (*p.x + *p.y) * sin(ANG_30) *-0.1 - *p.z;
 	*p.x = tmp_x;
 	*p.y = tmp_y;
 }
