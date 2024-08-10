@@ -108,7 +108,7 @@ t_cam	*cam_init(t_map *data)
 	if (NULL == cam)
 		return (NULL);
 	cam->projection = ISOMETRIC;
-	cam->colour_pallet = false;
+	cam->colour_pallet = true;
 	cam->scale_factor = scale_to_fit(data);
 	cam->scale_z = -0.16;
 	cam->cam_position_x = WINDOW_WIDTH / 2;

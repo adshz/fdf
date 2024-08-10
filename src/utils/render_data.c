@@ -198,7 +198,7 @@ static void	draw_line_segment(t_fdf *fdf, t_cartesian start, t_cartesian end)
 {
 	if (!fdf || !fdf->cam_ptr || !fdf->img_ptr)
 		return ;
-	printf("Draw line segment start\n");
+    printf("Draw line segment start\n");
     printf("Original - Start: x=%.2f, y=%.2f, z=%.2f, color=0x%X\n", start.x, start.y, start.z, start.colour);
     printf("Original - End: x=%.2f, y=%.2f, z=%.2f, color=0x%X\n", end.x, end.y, end.z, end.colour);
 

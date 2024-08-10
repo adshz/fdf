@@ -13,6 +13,43 @@
 # define LOW_COLOUR 0x008080   // Teal
 # define MID_COLOUR 0xFFA500   // Orange
 # define HIGH_COLOUR 0xFF00FF  // Magenta
+
+
+/* ... (keep other existing functions unchanged) ... */
+
+static int calculate_gradient_colour(float factor)
+{
+    int r, g, b;
+    int start_r, start_g, start_b;
+    int end_r, end_g, end_b;
+    int start_color, end_color;
+    
+    if (factor < 0.5) {
+        start_color = LOW_COLOUR;
+        end_color = MID_COLOUR;
+        factor = factor * 2;
+    } else {
+        start_color = MID_COLOUR;
+        end_color = HIGH_COLOUR;
+        factor = (factor - 0.5) * 2;
+    }
+    
+    start_r = (start_color >> 16) & 0xFF;
+    start_g = (start_color >> 8) & 0xFF;
+    start_b = start_color & 0xFF;
+    
+    end_r = (end_color >> 16) & 0xFF;
+    end_g = (end_color >> 8) & 0xFF;
+    end_b = end_color & 0xFF;
+    
+    r = start_r + (int)((end_r - start_r) * factor);
+    g = start_g + (int)((end_g - start_g) * factor);
+    b = start_b + (int)((end_b - start_b) * factor);
+    
+    return (r << 16) | (g << 8) | b;
+}
+
+
 							   //
 t_colour	*colour_init(t_cartesian start, t_cartesian end)
 {
@@ -116,19 +153,37 @@ static int	get_point_colour(t_fdf *fdf, t_cartesian *point)
 
 	map_file = fdf->map_data;
 	if (map_file->max_z == map_file->min_z)
+	{
+		printf("Debug: max_z == min_z, returning MID_COLOUR (0x%X)\n", MID_COLOUR);
 		return (MID_COLOUR);
-	factor = (float )(point->z - map_file->min_z) / (map_file->max_z - map_file->min_z);
-	value_colour = calculate_colour(factor);
+	}
+
+    // Normalize z value to [0, 1] range
+    factor = (point->z - map_file->min_z) / (map_file->max_z - map_file->min_z);
+    value_colour = calculate_gradient_colour(factor);
+	//factor = (float )(point->z - map_file->min_z) / (map_file->max_z - map_file->min_z);
+	value_colour = calculate_gradient_colour(factor);
+	printf("Debug: z = %.2f, max_z = %.2f, factor = %.2f, colour = 0x%X\n", \
+           point->z, (float) map_file->max_z, factor, value_colour);
 	return (value_colour);
 }
 
 void	apply_colours(t_fdf *fdf, t_cartesian *point)
 {
+	printf("Debug: Entering apply_colours. colour_pallet = %d\n", fdf->cam_ptr->colour_pallet);
 	if (fdf->cam_ptr->colour_pallet == false)
 	{
 		if (point->colour == -1)
+		{
 			point->colour = DEFAULT_COLOUR;
+			printf("Debug: Setting default colour: 0x%X\n", point->colour);
+		}
+		else
+			printf("Debug: Keeping original colour: 0x%X\n", point->colour);
 	}
 	else
+	{
 		point->colour = get_point_colour(fdf, point);
+		printf("Debug: Applied calculated colour: 0x%X\n", point->colour);
+	}
 }
