@@ -15,11 +15,13 @@
 
 void	scale(t_line *line, int scale_factor);
 void	translate(t_line *line, int move_x, int move_y);
+void	flip_y_axis(t_line *line);
 
 void	transform(t_cam *cam, t_line *line)
 {
 	scale(line, cam->scale_factor);
 	translate(line, cam->cam_position_x, cam->cam_position_y);
+	flip_y_axis(line);
 }
 
 void	scale(t_line *line, int scale_factor)
@@ -38,7 +40,11 @@ void	translate(t_line *line, int move_x, int move_y)
 	line->end.y += move_y;
 }
 
-
+void	flip_y_axis(t_line *line)
+{
+	line->start.y = WINDOW_HEIGHT - line->start.y;
+	line->end.y = WINDOW_HEIGHT - line->end.y;
+}
 
 // typedef struct s_transform_params
 // {

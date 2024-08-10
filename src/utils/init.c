@@ -110,7 +110,7 @@ t_cam	*cam_init(t_map *data)
 	cam->projection = ISOMETRIC;
 	cam->colour_pallet = false;
 	cam->scale_factor = scale_to_fit(data);
-	cam->scale_z = 1;
+	cam->scale_z = -0.16;
 	cam->cam_position_x = WINDOW_WIDTH / 2;
 	cam->cam_position_y = WINDOW_HEIGHT / 2;
 	cam->alpha = 0.523598775;
