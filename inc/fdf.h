@@ -6,7 +6,7 @@
 /*   By: szhong <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 10:25:53 by szhong            #+#    #+#             */
-/*   Updated: 2024/08/08 18:05:13 by szhong           ###   ########.fr       */
+/*   Updated: 2024/08/12 18:01:43 by szhong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FDF_H
@@ -115,8 +115,6 @@ typedef struct	s_fdf
 {
 	t_map	*map_data;
 	void	*mlx_ptr;
-	int	win_w;
-	int	win_h;
 	void	*win_ptr;
 	t_img	*img_ptr;
 	t_cam	*cam_ptr;
@@ -163,7 +161,7 @@ void	apply_colours(t_fdf *fdf, t_cartesian *point);
 void	rotate(t_cam *cam, t_line *line);
 void	project(t_cam *cam, t_line *line);
 void	x_rotation(t_cam *cam, t_line *line);
-void	transform(t_cam *cam, t_line *line);
+void	view_transform(t_cam *cam, t_line *line);
 
 
 #endif

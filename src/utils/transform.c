@@ -13,17 +13,6 @@
 #include <math.h>
 #include <float.h>
 
-void	scale(t_line *line, int scale_factor);
-void	translate(t_line *line, int move_x, int move_y);
-void	flip_y_axis(t_line *line);
-
-void	transform(t_cam *cam, t_line *line)
-{
-	scale(line, cam->scale_factor);
-	translate(line, cam->cam_position_x, cam->cam_position_y);
-	flip_y_axis(line);
-}
-
 void	scale(t_line *line, int scale_factor)
 {
 	line->start.x *= scale_factor;
@@ -32,12 +21,12 @@ void	scale(t_line *line, int scale_factor)
 	line->end.y *= scale_factor;
 }
 
-void	translate(t_line *line, int move_x, int move_y)
+void	translate(t_line *line, int cam_position_x, int cam_position_y)
 {
-	line->start.x += move_x;
-	line->start.y += move_y;
-	line->end.x += move_x;
-	line->end.y += move_y;
+	line->start.x += cam_position_x;
+	line->start.y += cam_position_y;
+	line->end.x += cam_position_x;
+	line->end.y += cam_position_y;
 }
 
 void	flip_y_axis(t_line *line)
@@ -46,6 +35,12 @@ void	flip_y_axis(t_line *line)
 	line->end.y = WINDOW_HEIGHT - line->end.y;
 }
 
+void	view_transform(t_cam *cam, t_line *line)
+{
+	scale(line, cam->scale_factor);
+	translate(line, cam->cam_position_x, cam->cam_position_y);
+	flip_y_axis(line);
+}
 // typedef struct s_transform_params
 // {
 // 	float	*x;

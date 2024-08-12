@@ -27,10 +27,10 @@ static void	isometric(t_proj_params p)
 	float	stretch_factor;
 	
 	stretch_factor = 1;
-	tmp_x = (*p.x - *p.y) * cos(ANG_30) * stretch_factor;
-	tmp_y = (*p.x + *p.y) * sin(ANG_30) *-0.1 - *p.z;
-	*p.x = tmp_x;
-	*p.y = tmp_y;
+	tmp_x = (*(p.x) - *(p.y)) * cos(ANG_30) * stretch_factor;
+	tmp_y = (*(p.x) + *(p.y)) * sin(ANG_30) *-0.1 - *(p.z);
+	*(p.x) = tmp_x;
+	*(p.y) = tmp_y;
 }
 
 static void	perspective(t_proj_params p)
@@ -39,20 +39,20 @@ static void	perspective(t_proj_params p)
 	float	tmp_x;
 	float	tmp_y;
 
-	z = *p.z + p.transform_z;
-	tmp_x = *p.x / z;
-	tmp_y = *p.y / z;
-	*p.x = tmp_x * p.transform_z;
-	*p.y = -tmp_y * p.transform_z;
+	z = *(p.z) + p.transform_z;
+	tmp_x = *(p.x) / z;
+	tmp_y = *(p.y) / z;
+	*(p.x) = tmp_x * p.transform_z;
+	*(p.y) = tmp_y * p.transform_z;
 }
 
 static void	project_point(t_cartesian *point, t_projection_type proj, float transform_z)
 {
 	t_proj_params	p;
 
-	p.x = &point->x;
-	p.y = &point->y;
-	p.z = &point->z;
+	p.x = &(point->x);
+	p.y = &(point->y);
+	p.z = &(point->z);
 	p.transform_z = transform_z;
 	if (proj == ISOMETRIC)
 		isometric(p);

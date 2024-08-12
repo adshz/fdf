@@ -293,7 +293,6 @@ static void draw_line_bresenham(t_fdf *fdf, t_cartesian start, t_cartesian end)
     color = colour_init(start, end);
     if (!color)
         clean_free(fdf);
-
     if (absolute(end.y - start.y) < absolute(end.x - start.x))
     {
         if (start.x > end.x)
@@ -337,7 +336,7 @@ static void draw_line_segment(t_fdf *fdf, t_cartesian start, t_cartesian end)
     printf("Applying transformations...\n");
     rotate(fdf->cam_ptr, fdf->img_ptr->line_segment);
     project(fdf->cam_ptr, fdf->img_ptr->line_segment);
-    transform(fdf->cam_ptr, fdf->img_ptr->line_segment);
+    view_transform(fdf->cam_ptr, fdf->img_ptr->line_segment);
     printf("After transformations:\n");
     printf("Start: x=%.2f, y=%.2f, z=%.2f, color=0x%X\n", 
            fdf->img_ptr->line_segment->start.x, 
@@ -425,10 +424,7 @@ void	render_data(t_fdf *fdf)
 	int	col;
 
 	row = 0;
-	int line_segments = 0;
-	printf("Starting render_data. Map size: %d x %d\n", fdf->map_data->max_m, fdf->map_data->max_n);
 	canvas_setup(fdf->img_ptr, PIXEL_COUNTS * 4);
-	printf("Canvas setup complete\n");
 	while (row < fdf->map_data->max_m)
 	{
 		col = 0;
@@ -437,25 +433,20 @@ void	render_data(t_fdf *fdf)
 			// horiztonal
 			if (col < fdf->map_data->max_n - 1)
 			{
-					printf("Drawing horizontal line: row %d, col %d to %d\n", row, col, col + 1);
 					draw_line_segment(fdf, fdf->map_data->points[row][col], \
 						fdf->map_data->points[row][col + 1]);
-					line_segments++;
 			
 			}
 			// vertical line
 			if (row < fdf->map_data->max_m - 1)
 			{
-				printf("Drawing vertical line: row %d to %d, col %d\n", row, row + 1, col);
 				draw_line_segment(fdf, fdf->map_data->points[row][col], \
 						fdf->map_data->points[row + 1][col]);
-				line_segments++;
 			}
 			col++;
 		}
 		row++;
 	}
-	printf("Render complete. Total line segments: %d\n", line_segments);
 	mlx_put_image_to_window(fdf->mlx_ptr, fdf->win_ptr, fdf->img_ptr->img_buff, \
 			0, 0);
 	printf("Image put to window\n");

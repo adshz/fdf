@@ -72,7 +72,6 @@ static int	interpolate_colour(int colour_a, int colour_b, float factor)
 	r = interpolate_component((colour_a >> 16) & 0xFF, (colour_b >> 16) && 0xFF, factor);
 	g = interpolate_component((colour_a >> 8) & 0xFF, (colour_b >> 8) && 0xFF, factor);
 	b = interpolate_component((colour_a) & 0xFF, (colour_b) && 0xFF, factor);
-
 	return ((r << 16) | (g << 8) | b);
 }
 
