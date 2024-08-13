@@ -6,7 +6,7 @@
 #    By: szhong <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/11 14:14:29 by szhong            #+#    #+#              #
-#    Updated: 2024/08/08 15:09:32 by szhong           ###   ########.fr        #
+#    Updated: 2024/08/13 17:10:14 by szhong           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -76,7 +76,6 @@ fclean: clean
 	@echo "[FDF] Everything Removed"
 	@echo "========Project Reset========"
 	@rm -f $(NAME)
-	@rm -f $(TAG_FILE)
 
 re: fclean all
 

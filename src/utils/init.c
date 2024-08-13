@@ -116,6 +116,7 @@ t_cam	*cam_init(t_map *data)
 	cam->alpha = 0.523598775;
 	cam->beta = 0.0;
 	cam->gamma = 0.785398163;
+	cam->line_thickness = 1.5;
 	return (cam);
 }
 

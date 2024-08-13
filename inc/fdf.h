@@ -6,7 +6,7 @@
 /*   By: szhong <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 10:25:53 by szhong            #+#    #+#             */
-/*   Updated: 2024/08/12 18:01:43 by szhong           ###   ########.fr       */
+/*   Updated: 2024/08/13 18:25:38 by szhong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FDF_H
@@ -28,9 +28,6 @@
 # define DEFAULT_COLOUR 0xFFFFFF
 # define ANG_30	0.52359877
 # define ANG_45 0.78539816
-
-
-
 
 typedef enum e_projection
 {
@@ -109,6 +106,7 @@ typedef struct s_display
 	double	alpha;
 	double	beta;
 	double	gamma;
+	double	line_thickness;
 }	t_cam;
 
 typedef struct	s_fdf
@@ -146,8 +144,8 @@ float	max(float a, float b);
 void	clean_up(t_fdf **fdf);
 void	clean_free(t_fdf *fdf);
 void	key_close(t_fdf *fdf);
-int	esc_close(int keycode, t_fdf *fdf);
-int	click_close(t_fdf *fdf);
+void	esc_close(int keycode, t_fdf *fdf);
+int		close_window(t_fdf *fdf);
 
 void	render_data(t_fdf *fdf);
 
@@ -162,7 +160,8 @@ void	rotate(t_cam *cam, t_line *line);
 void	project(t_cam *cam, t_line *line);
 void	x_rotation(t_cam *cam, t_line *line);
 void	view_transform(t_cam *cam, t_line *line);
-
+int		key_handler(int keycode, t_fdf *fdf);
+//int		mouse_handler(int mousecode, t_fdf *fdf);
 
 #endif
 

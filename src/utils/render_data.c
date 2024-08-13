@@ -193,26 +193,26 @@ static float	absolute(float nbr)
 //	}
 //	free(colour);
 //}
-static void draw_thick_pixel(t_fdf *fdf, int x, int y, int colour)
+static void draw_thick_pixel(t_fdf *fdf, int x, int y, int colour, double thickness)
 {
-    int dx;
-    int dy;
+    double dx;
+    double dy;
     int temp_x;
     int temp_y;
     
-    dy = -LINE_THICKNESS / 2;
-    while (dy <= LINE_THICKNESS / 2)
+    dy = -thickness / 2;
+    while (dy <= thickness / 2)
     {
-        dx = -LINE_THICKNESS / 2;
-        while (dx <= LINE_THICKNESS / 2)
+        dx = -thickness / 2;
+        while (dx <= thickness / 2)
         {
-            temp_x = x + dx;
-            temp_y = y + dy;
+            temp_x = x + (int)dx;
+            temp_y = y + (int)dy;
             if (temp_x >= 0 && temp_x < WINDOW_WIDTH && temp_y >= 0 && temp_y < WINDOW_HEIGHT)
                 set_pixel_colour(fdf->img_ptr, temp_x, temp_y, colour);
-            dx++;
+            dx += 0.5;
         }
-        dy++;
+        dy += 0.5;
     }
 }
 
@@ -239,7 +239,8 @@ static void draw_line_low(t_fdf *fdf, t_cartesian start, t_cartesian end, t_colo
 
     while (x <= end.x)
     {
-        draw_thick_pixel(fdf, x, y, get_colour(color, x - start.x, end.x - start.x));
+        draw_thick_pixel(fdf, x, y, get_colour(color, x - start.x, end.x - start.x), \
+				fdf->cam_ptr->line_thickness);
         if (D > 0)
         {
             y = y + yi;
@@ -274,7 +275,8 @@ static void draw_line_high(t_fdf *fdf, t_cartesian start, t_cartesian end, t_col
 
     while (y <= end.y)
     {
-        draw_thick_pixel(fdf, x, y, get_colour(color, y - start.y, end.y - start.y));
+        draw_thick_pixel(fdf, x, y, get_colour(color, y - start.y, end.y - start.y), \
+				fdf->cam_ptr->line_thickness);
         if (D > 0)
         {
             x = x + xi;
