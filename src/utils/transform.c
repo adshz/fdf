@@ -38,8 +38,13 @@ void	flip_y_axis(t_line *line)
 void	view_transform(t_cam *cam, t_line *line)
 {
 	scale(line, cam->scale_factor);
-	translate(line, cam->cam_position_x, cam->cam_position_y);
-	flip_y_axis(line);
+	if (cam->projection == TOP)
+		translate(line, cam->cam_position_x, cam->cam_position_y);
+	else
+	{
+		translate(line, cam->cam_position_x, cam->cam_position_y);
+		flip_y_axis(line);
+	}
 }
 // typedef struct s_transform_params
 // {

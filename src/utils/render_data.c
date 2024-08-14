@@ -451,5 +451,6 @@ void	render_data(t_fdf *fdf)
 	}
 	mlx_put_image_to_window(fdf->mlx_ptr, fdf->win_ptr, fdf->img_ptr->img_buff, \
 			0, 0);
+	print_menu(fdf);
 	printf("Image put to window\n");
 }

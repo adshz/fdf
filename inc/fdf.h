@@ -6,7 +6,7 @@
 /*   By: szhong <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 10:25:53 by szhong            #+#    #+#             */
-/*   Updated: 2024/08/13 18:25:38 by szhong           ###   ########.fr       */
+/*   Updated: 2024/08/14 16:52:54 by szhong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FDF_H
@@ -163,6 +163,7 @@ void	view_transform(t_cam *cam, t_line *line);
 int		key_handler(int keycode, t_fdf *fdf);
 //int		mouse_handler(int mousecode, t_fdf *fdf);
 
+void	print_menu(t_fdf *fdf);
 #endif
 
 #if 0

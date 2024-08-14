@@ -86,14 +86,14 @@ float	min(float a, float b)
 		return (b);
 }
 
-float	scale_to_fit(t_map *map)
+float	scale_to_fit(t_map *data)
 {
 	float	scale_x;
 	float	scale_y;
 	float	scale_factor;
 
-	scale_x = WINDOW_WIDTH / map->max_n;
-	scale_y = WINDOW_HEIGHT / map->max_m;
+	scale_x = WINDOW_WIDTH / data->max_n;
+	scale_y = WINDOW_HEIGHT / data->max_m;
 	scale_factor = min(scale_x, scale_y);
 	if (scale_factor < 4)
 		return (2);
@@ -113,9 +113,9 @@ t_cam	*cam_init(t_map *data)
 	cam->scale_z = -0.16;
 	cam->cam_position_x = WINDOW_WIDTH / 2;
 	cam->cam_position_y = WINDOW_HEIGHT / 2;
-	cam->alpha = 0.523598775;
+	cam->alpha = ANG_30;
 	cam->beta = 0.0;
-	cam->gamma = 0.785398163;
+	cam->gamma = ANG_45;
 	cam->line_thickness = 1.5;
 	return (cam);
 }

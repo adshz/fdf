@@ -83,6 +83,64 @@ static void	key_thickness(int keycode, t_fdf *fdf)
 		fdf->cam_ptr->line_thickness = 10;
 }
 
+static void key_scale(int keycode, t_fdf *fdf)
+{
+	float	scale_step;
+
+	scale_step = 1.1f;
+	if (keycode == XK_Page_Up)
+		fdf->cam_ptr->scale_factor *= scale_step;
+	else if (keycode == XK_Page_Down)
+		fdf->cam_ptr->scale_factor /= scale_step;
+}
+
+static void reset(t_fdf *fdf)
+{
+	fdf->cam_ptr->scale_factor = scale_to_fit(fdf->map_data);
+	fdf->cam_ptr->scale_z = -0.16;
+	fdf->cam_ptr->cam_position_x = WINDOW_WIDTH / 2;
+	fdf->cam_ptr->cam_position_y = WINDOW_HEIGHT / 2;
+	fdf->cam_ptr->alpha = ANG_30;
+	fdf->cam_ptr->beta = 0.0;
+	fdf->cam_ptr->gamma = ANG_45;
+	fdf->cam_ptr->line_thickness = 1.5;
+	fdf->cam_ptr->projection = ISOMETRIC;
+	fdf->cam_ptr->colour_pallet = true;
+}
+
+static void key_change_colour(int keycode, t_fdf *fdf)
+{
+	if (keycode == XK_space)
+	{
+		if (fdf->cam_ptr->colour_pallet == true)
+			fdf->cam_ptr->colour_pallet = false;
+		else
+			fdf->cam_ptr->colour_pallet = true;
+	}
+}
+
+static void key_translate(int keycode, t_fdf *fdf)
+{
+	if (keycode == XK_W || keycode == 'w' || keycode == 'W')
+		fdf->cam_ptr->cam_position_y += 10;
+	else if (keycode == XK_S || keycode == 's' || keycode == 'S')
+		fdf->cam_ptr->cam_position_y -= 10;
+	else if (keycode == XK_D || keycode == 'd' || keycode == 'D')
+		fdf->cam_ptr->cam_position_x += 10;
+	else if (keycode == XK_A || keycode == 'a' || keycode == 'A')
+		fdf->cam_ptr->cam_position_x -= 10;
+}
+
+static void key_projection(int keycode, t_fdf *fdf)
+{
+	if (keycode == XK_I || keycode == 'i' || keycode == 'I')
+		fdf->cam_ptr->projection = ISOMETRIC;
+	else if (keycode == XK_P || keycode == 'p' || keycode == 'P')
+		fdf->cam_ptr->projection = PERSPECTIVE;
+	else if (keycode == XK_T || keycode == 't' || keycode == 'T')
+		fdf->cam_ptr->projection = TOP;
+}
+
 int	key_handler(int keycode, t_fdf *fdf)
 {
 	if (keycode == XK_Escape)
@@ -92,6 +150,21 @@ int	key_handler(int keycode, t_fdf *fdf)
 		key_rotate(keycode, fdf);
 	else if (keycode == 61 || keycode == XK_minus)
 		key_thickness(keycode, fdf);
+	else if (keycode == XK_Page_Up || keycode == XK_Page_Down)
+		key_scale(keycode, fdf);
+	else if (keycode == XK_space)
+		key_change_colour(keycode, fdf);
+	else if (keycode == XK_W || keycode == 'w' || keycode == 'W' \
+			|| keycode == XK_S || keycode == 's' || keycode == 'S' \
+			|| keycode == XK_D || keycode == 'd' || keycode == 'D' \
+			|| keycode == XK_A || keycode == 'a' || keycode == 'A')
+		key_translate(keycode, fdf);
+	else if (keycode == XK_I || keycode == 'i' || keycode == 'I' \
+			|| keycode == XK_P || keycode == 'p' || keycode == 'P' \
+			|| keycode == XK_T || keycode == 't' || keycode == 'T')
+		key_projection(keycode, fdf);
+	else if (keycode == XK_R || keycode == 'r' || keycode == 'R')
+		reset(fdf);
 	render_data(fdf);
 	return (0);
 //	mlx_hook(fdf->win_ptr, 17, 1L<<17, esc_close, &fdf);
@@ -99,7 +172,19 @@ int	key_handler(int keycode, t_fdf *fdf)
 //	mlx_hook(fdf->win_ptr, 2, 1L<<0, rotate_keypress, &fdf);
 }
 
-//int	mouse_hanlder(int mousecode, t_fdf *fdf)
+//int	mouse_handler(int mousecode, t_fdf *fdf)
 //{
-//	if (mousecode == 
+//	float	scale_step;
+//
+//	scale_step = 0.1f;
+//	if (mousecode == 1)
+//		fdf->cam_ptr->scale_factor += scale_step;
+//	else if (mousecode == 2)
+//		fdf->cam_ptr->scale_factor -= scale_step;
+//	if (fdf->cam_ptr->scale_factor < 0.1f)
+//		fdf->cam_ptr->scale_factor = 0.1f;
+//	else if (fdf->cam_ptr->scale_factor > 10.0f)
+//		fdf->cam_ptr->scale_factor = 10.0f;
+//	render_data(fdf);
+//	return (0);
 //}

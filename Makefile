@@ -6,7 +6,7 @@
 #    By: szhong <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/11 14:14:29 by szhong            #+#    #+#              #
-#    Updated: 2024/08/13 17:10:14 by szhong           ###   ########.fr        #
+#    Updated: 2024/08/14 16:05:02 by szhong           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,8 @@ SRCS		:=	\
 			utils/rotate.c \
 			utils/project.c \
 			utils/transform.c \
-			utils/colour_handler.c 
+			utils/colour_handler.c \
+			utils/prompt.c
 
 OBJ_DIR		:=	./obj
 OBJS		:=	$(addprefix $(OBJ_DIR)/, $(patsubst %.c, %.o, $(SRCS)))
