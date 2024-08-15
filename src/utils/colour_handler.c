@@ -10,86 +10,86 @@
 /*																			  */
 /* ************************************************************************** */
 #include "fdf.h"
-# define LOW_COLOUR 0x008080   // Teal
-# define MID_COLOUR 0xFFA500   // Orange
-# define HIGH_COLOUR 0xFF00FF  // Magenta
 
-
-/* ... (keep other existing functions unchanged) ... */
-
-static int calculate_gradient_colour(float factor)
+static void	initial_p_colour(float factor, t_col_params *p)
 {
-    int r, g, b;
-    int start_r, start_g, start_b;
-    int end_r, end_g, end_b;
-    int start_color, end_color;
-    
-    if (factor < 0.5) {
-        start_color = LOW_COLOUR;
-        end_color = MID_COLOUR;
-        factor = factor * 2;
-    } else {
-        start_color = MID_COLOUR;
-        end_color = HIGH_COLOUR;
-        factor = (factor - 0.5) * 2;
-    }
-    
-    start_r = (start_color >> 16) & 0xFF;
-    start_g = (start_color >> 8) & 0xFF;
-    start_b = start_color & 0xFF;
-    
-    end_r = (end_color >> 16) & 0xFF;
-    end_g = (end_color >> 8) & 0xFF;
-    end_b = end_color & 0xFF;
-    
-    r = start_r + (int)((end_r - start_r) * factor);
-    g = start_g + (int)((end_g - start_g) * factor);
-    b = start_b + (int)((end_b - start_b) * factor);
-    
-    return (r << 16) | (g << 8) | b;
+	if (factor < 0.5)
+	{
+		(*p).start_colour = LOW_COLOUR;
+		(*p).end_colour = MID_COLOUR;
+		factor = factor * 2;
+	}
+	else
+	{
+		(*p).start_colour = MID_COLOUR;
+		(*p).end_colour = HIGH_COLOUR;
+		factor = (factor - 0.5) * 2;
+	}
+	return ;
 }
 
+static int	calculate_gradient_colour(float factor)
+{
+	t_col_params	p;
 
-							   //
+	initial_p_colour(factor, &p);
+	p.start_r = (p.start_colour >> 16) & 0xFF;
+	p.start_g = (p.start_colour >> 8) & 0xFF;
+	p.start_b = p.start_colour & 0xFF;
+	p.end_r = (p.end_colour >> 16) & 0xFF;
+	p.end_g = (p.end_colour >> 8) & 0xFF;
+	p.end_b = p.end_colour & 0xFF;
+	p.r = p.start_r + (int)((p.end_r - p.start_r) * factor);
+	p.g = p.start_g + (int)((p.end_g - p.start_g) * factor);
+	p.b = p.start_b + (int)((p.end_b - p.start_b) * factor);
+	return ((p.r << 16) | (p.g << 8) | p.b);
+}
+
 t_colour	*colour_init(t_cartesian start, t_cartesian end)
 {
 	t_colour	*colour;
+	int			e_col;
+	int			s_col;
 
+	s_col = start.colour;
+	e_col = end.colour;
 	colour = malloc(sizeof(t_colour));
 	if (!colour)
 		return (NULL);
-	colour->start_colour = start.colour & 0xFFFFFF;
-	colour->end_colour = end.colour & 0xFFFFFF;
-	colour->delta_r = ((end.colour >> 16) & 0xFF) - ((start.colour >> 16) & 0xFF);
-	colour->delta_g = ((end.colour >> 8) & 0xFF) - ((start.colour >> 8) & 0xFF);
-	colour->delta_b = (end.colour & 0xFF) - (start.colour & 0xFF);
+	colour->start_colour = s_col & 0xFFFFFF;
+	colour->end_colour = e_col & 0xFFFFFF;
+	colour->delta_r = ((e_col >> 16) & 0xFF) - ((s_col >> 16) & 0xFF);
+	colour->delta_g = ((e_col >> 8) & 0xFF) - ((s_col >> 8) & 0xFF);
+	colour->delta_b = (e_col & 0xFF) - (s_col & 0xFF);
 	return (colour);
 }
 
-int ft_clamp(int value, int min, int max)
+int	ft_clamp(int value, int min, int max)
 {
 	if (value < min)
-		return min;
+		return (min);
 	if (value > max)
-		return max;
-	return value;
+		return (max);
+	return (value);
 }
 
-int get_colour(t_colour *colour, int i_line, int line_size)
+int	get_colour(t_colour *colour, int i_line, int line_size)
 {
-	int r;
-	int g;
-	int b;
-	float progress;
+	float	progress;
+	int		r;
+	int		g;
+	int		b;
+	int		c_s_col;
 
 	progress = (float)i_line / line_size;
-	r = ((colour->start_colour >> 16) & 0xFF) + (int)(colour->delta_r * progress);
-	g = ((colour->start_colour >> 8) & 0xFF) + (int)(colour->delta_g * progress);
-	b = (colour->start_colour & 0xFF) + (int)(colour->delta_b * progress);
+	c_s_col = colour->start_colour;
+	r = ((c_s_col >> 16) & 0xFF) + (int)(colour->delta_r * progress);
+	g = ((c_s_col >> 8) & 0xFF) + (int)(colour->delta_g * progress);
+	b = (c_s_col & 0xFF) + (int)(colour->delta_b * progress);
 	r = ft_clamp(r, 0, 255);
 	g = ft_clamp(g, 0, 255);
 	b = ft_clamp(b, 0, 255);
-	return (r << 16) | (g << 8) | b;
+	return ((r << 16) | (g << 8) | b);
 }
 
 static int	interpolate_component(int start, int end, float factor)
@@ -100,51 +100,38 @@ static int	interpolate_component(int start, int end, float factor)
 	return (result);
 }
 
-static int	interpolate_colour(int colour_a, int colour_b, float factor)
+static int	interpolate_colour(int c_a, int c_b, float factor)
 {
 	int	r;
 	int	g;
 	int	b;
 
-	r = interpolate_component((colour_a >> 16) & 0xFF, (colour_b >> 16) & 0xFF, factor);
-	g = interpolate_component((colour_a >> 8) & 0xFF, (colour_b >> 8) & 0xFF, factor);
-	b = interpolate_component((colour_a) & 0xFF, (colour_b) & 0xFF, factor);
-
+	r = interpolate_component((c_a >> 16) & 0xFF, (c_b >> 16) & 0xFF, factor);
+	g = interpolate_component((c_a >> 8) & 0xFF, (c_b >> 8) & 0xFF, factor);
+	b = interpolate_component((c_a) & 0xFF, (c_b) & 0xFF, factor);
 	return ((r << 16) | (g << 8) | b);
 }
 
 static int	calculate_colour(float factor)
 {
 	int	colour;
+	int	adj_fac;
 
 	if (factor < 0.5)
-		colour = interpolate_colour(LOW_COLOUR, MID_COLOUR, factor * 2);
+	{
+		adj_fac = factor * 2;
+		colour = interpolate_colour(LOW_COLOUR, MID_COLOUR, adj_fac);
+	}
 	else
-		colour = interpolate_colour(MID_COLOUR, HIGH_COLOUR, (factor - 0.5) * 2);
+	{
+		adj_fac = (factor - 0.5) * 2;
+		colour = interpolate_colour(MID_COLOUR, HIGH_COLOUR, adj_fac);
+	}
 	return (colour);
 }
 
-//static	t_colour	*colour_pallet_init(int min_colour, int max_colour)
-//{
-//	t_colour	*colour;
-//
-//	colour = malloc(sizeof(t_colour));
-//	if (!colour)
-//		return (NULL);
-//	colour->start_colour = min_colour;
-//	colour->start_r = (RED & min_colour) >> 16;
-//	colour->start_g = (GREEN & min_colour) >> 8;
-//	colour->start_b = (BLUE & min_colour);
-//	colour->end_colour = max_colour;
-//	colour->end_r = (RED & max_colour) >> 16;
-//	colour->end_g = (GREEN & max_colour) >> 8;
-//	colour->end_b = (BLUE & max_colour);
-//	colour->delta_r = (colour->end_r - colour->start_r);
-//	colour->delta_g = (colour->end_g - colour->start_g);
-//	colour->delta_b = (colour->end_b - colour->start_b);
-//	return (colour);
-//}
-
+// Normalize z value to [0, 1] range 
+// factor = d(a point z - minimum z) / range_z value 
 static int	get_point_colour(t_fdf *fdf, t_cartesian *point)
 {
 	float	factor;
@@ -153,37 +140,21 @@ static int	get_point_colour(t_fdf *fdf, t_cartesian *point)
 
 	map_file = fdf->map_data;
 	if (map_file->max_z == map_file->min_z)
-	{
-		printf("Debug: max_z == min_z, returning MID_COLOUR (0x%X)\n", MID_COLOUR);
 		return (MID_COLOUR);
-	}
-
-    // Normalize z value to [0, 1] range
-    factor = (point->z - map_file->min_z) / (map_file->max_z - map_file->min_z);
-    value_colour = calculate_gradient_colour(factor);
-	//factor = (float )(point->z - map_file->min_z) / (map_file->max_z - map_file->min_z);
+	factor = (point->z - map_file->min_z) / (map_file->max_z - map_file->min_z);
 	value_colour = calculate_gradient_colour(factor);
-	printf("Debug: z = %.2f, max_z = %.2f, factor = %.2f, colour = 0x%X\n", \
-           point->z, (float) map_file->max_z, factor, value_colour);
+	value_colour = calculate_gradient_colour(factor);
 	return (value_colour);
 }
 
+//	if point->colour != -1 then  Keeping original colour: 0x%X\n"
 void	apply_colours(t_fdf *fdf, t_cartesian *point)
 {
-	printf("Debug: Entering apply_colours. colour_pallet = %d\n", fdf->cam_ptr->colour_pallet);
 	if (fdf->cam_ptr->colour_pallet == false)
 	{
 		if (point->colour == -1)
-		{
 			point->colour = DEFAULT_COLOUR;
-			printf("Debug: Setting default colour: 0x%X\n", point->colour);
-		}
-		else
-			printf("Debug: Keeping original colour: 0x%X\n", point->colour);
 	}
 	else
-	{
 		point->colour = get_point_colour(fdf, point);
-		printf("Debug: Applied calculated colour: 0x%X\n", point->colour);
-	}
 }

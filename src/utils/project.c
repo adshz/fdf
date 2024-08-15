@@ -10,32 +10,30 @@
 /*																			  */
 /* ************************************************************************** */
 #include "fdf.h"
-#include <float.h>
+//#include <float.h>
 
-typedef struct s_proj_params
+static float	float_abs(float nbr)
 {
-	float	*x;
-	float	*y;
-	float	*z;
-	float	transform_z;
-}	t_proj_params;
+	if (nbr < 0)
+		return (nbr * (-1));
+	return (nbr);
+}
 
 static void	isometric(t_proj_params p)
 {
 	float	tmp_x;
 	float	tmp_y;
 	float	stretch_factor;
-	
+
 	stretch_factor = 1;
 	tmp_x = (*(p.x) - *(p.y)) * cos(ANG_30) * stretch_factor;
-	tmp_y = (*(p.x) + *(p.y)) * sin(ANG_30) *-0.1 - *(p.z);
+	tmp_y = (*(p.x) + *(p.y)) * sin(ANG_30) * -0.1 - *(p.z);
 	*(p.x) = tmp_x;
 	*(p.y) = tmp_y;
 }
 
 // transform_z controlled perspective effect z-offset projection
-//
-static void perspective(t_proj_params p)
+static void	perspective(t_proj_params p)
 {
 	float	z;
 	float	x;
@@ -47,7 +45,7 @@ static void perspective(t_proj_params p)
 	x = *(p.x);
 	y = *(p.y);
 	z_offset = p.transform_z;
-	if (fabsf(z + z_offset) < 0.001f)
+	if (float_abs(z + z_offset) < 0.001f)
 		z = 0.001f - z_offset;
 	scale = z_offset / (z + z_offset);
 	x *= scale;
@@ -57,7 +55,8 @@ static void perspective(t_proj_params p)
 	*(p.z) = z;
 }
 
-static void	project_point(t_cartesian *point, t_projection_type proj, float transform_z)
+static void	project_point(t_cartesian *point, t_proj_type proj, \
+		float transform_z)
 {
 	t_proj_params	p;
 
@@ -83,7 +82,9 @@ void	project(t_cam *cam, t_line *line)
 		rotated_line.start.y = rotated_line.start.z;
 		rotated_line.end.y = rotated_line.end.z;
 	}
-	project_point(&(rotated_line.start), cam->projection, rotated_line.transform_z);
-	project_point(&(rotated_line.end), cam->projection, rotated_line.transform_z);
+	project_point(&(rotated_line.start), cam->projection, \
+			rotated_line.transform_z);
+	project_point(&(rotated_line.end), cam->projection, \
+			rotated_line.transform_z);
 	*line = rotated_line;
 }

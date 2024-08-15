@@ -12,9 +12,6 @@
 #include "fdf.h"
 #include "libft.h"
 #include <math.h>
-#include <float.h>
-# define MIN_SCALE 3
-# define SCALE_DIVISOR 1.5
 
 float	max(float a, float b)
 {
@@ -153,7 +150,8 @@ t_fdf	*fdf_init(char	*filepath)
 	fdf->map_data = parse_data(filepath);
 	move_origin(fdf->map_data);
 	fdf->mlx_ptr = mlx_init();
-	fdf->win_ptr = mlx_new_window(fdf->mlx_ptr, WINDOW_WIDTH , WINDOW_HEIGHT, "TESTING");
+	fdf->win_ptr = mlx_new_window(fdf->mlx_ptr, WINDOW_WIDTH, \
+			WINDOW_HEIGHT, "fdf");
 	fdf->img_ptr = img_init(fdf->mlx_ptr);
 	fdf->cam_ptr = cam_init(fdf->map_data);
 	if (!fdf->img_ptr || !fdf->cam_ptr)

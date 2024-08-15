@@ -6,7 +6,7 @@
 /*   By: szhong <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 10:25:53 by szhong            #+#    #+#             */
-/*   Updated: 2024/08/14 16:52:54 by szhong           ###   ########.fr       */
+/*   Updated: 2024/08/15 17:09:10 by szhong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FDF_H
@@ -23,18 +23,87 @@
 # define WINDOW_WIDTH 1680 
 # define WINDOW_HEIGHT 980
 # define PIXEL_COUNTS 1646400
+# define LOW_COLOUR 0x008080   // Teal
+# define MID_COLOUR 0xFFA500   // Orange
+# define HIGH_COLOUR 0xFF00FF  // Magenta
 
 # define DEFAULT_BACKGROUND 0x010203
 # define DEFAULT_COLOUR 0xFFFFFF
 # define ANG_30	0.52359877
 # define ANG_45 0.78539816
 
+// redner module
+typedef struct s_draw_params
+{
+	int	dx;
+	int	dy;
+	int	diff;
+	int	x;
+	int	y;
+	int	draw_colour;
+}	t_draw_params;
+
+//project module
+typedef struct s_proj_params
+{
+	float	*x;
+	float	*y;
+	float	*z;
+	float	transform_z;
+}	t_proj_params;
+
+// reotate module
+typedef enum e_axis
+{
+	X_AXIS,
+	Y_AXIS,
+	Z_AXIS
+}	t_axis;
+
+typedef struct s_rot_params
+{
+	float	*a;
+	float	*b;
+	int	sign1;
+	int	sign2;
+}	t_rot_params;
+// render module
+typedef struct s_line_params
+{
+				int x;
+				int y;
+				int dx;
+				int dy;
+				int sx;
+				int sy;
+				int err;
+				int e2;
+				int max_steps;
+				int current_step;
+} t_line_params;
+
+// colour module
+typedef struct s_col_params
+{
+	int	r;
+	int	g;
+	int	b;
+	int	end_r;
+	int	end_g;
+	int	end_b;
+	int	start_r;
+	int	start_g;
+	int	start_b;
+	int	start_colour;
+	int	end_colour;
+}	t_col_params;
+
 typedef enum e_projection
 {
 	ISOMETRIC,
 	PERSPECTIVE,
 	TOP
-}	t_projection_type;
+}	t_proj_type;
 
 typedef	struct	s_colour
 {
@@ -97,7 +166,7 @@ typedef struct	s_img
 
 typedef struct s_display
 {
-	t_projection_type	projection;
+	t_proj_type	projection;
 	bool	colour_pallet;
 	float	scale_factor;
 	float	scale_z;

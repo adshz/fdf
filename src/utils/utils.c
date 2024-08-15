@@ -11,10 +11,10 @@
 /* ************************************************************************** */
 #include "fdf.h"
 
-void	clean_up(t_fdf	**fdf)
+void	clean_up(t_fdf **fdf)
 {
 	if ((*fdf)->map_data == NULL || (*fdf)->img_ptr == NULL || \
-			(*fdf)->cam_ptr == NULL || (*fdf)->mlx_ptr == NULL\
+			(*fdf)->cam_ptr == NULL || (*fdf)->mlx_ptr == NULL \
 			|| (*fdf)->win_ptr == NULL)
 	{
 		clean_free((*fdf));

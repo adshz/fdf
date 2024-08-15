@@ -13,8 +13,6 @@
 #include <X11/keysym.h>
 #include <X11/X.h>
 
-# define ROTATION_STEP 0.1
-
 static void	win_clean_free(t_fdf *fdf)
 {
 	if (fdf)
@@ -62,13 +60,13 @@ int	close_window(t_fdf *fdf)
 static void	key_rotate(int keycode, t_fdf *fdf)
 {
 	if (keycode == XK_Left)
-		fdf->cam_ptr->beta -= ROTATION_STEP;
+		fdf->cam_ptr->beta -= 0.1;
 	else if (keycode == XK_Right)
-		fdf->cam_ptr->beta += ROTATION_STEP;
+		fdf->cam_ptr->beta += 0.1;
 	else if (keycode == XK_Up)
-		fdf->cam_ptr->alpha -= ROTATION_STEP;
+		fdf->cam_ptr->alpha -= 0.1;
 	else if (keycode == XK_Down)
-		fdf->cam_ptr->alpha += ROTATION_STEP;
+		fdf->cam_ptr->alpha += 0.1;
 }
 
 static void	key_thickness(int keycode, t_fdf *fdf)
@@ -83,7 +81,7 @@ static void	key_thickness(int keycode, t_fdf *fdf)
 		fdf->cam_ptr->line_thickness = 10;
 }
 
-static void key_scale(int keycode, t_fdf *fdf)
+static void	key_scale(int keycode, t_fdf *fdf)
 {
 	float	scale_step;
 
@@ -94,7 +92,7 @@ static void key_scale(int keycode, t_fdf *fdf)
 		fdf->cam_ptr->scale_factor /= scale_step;
 }
 
-static void reset(t_fdf *fdf)
+static void	reset(t_fdf *fdf)
 {
 	fdf->cam_ptr->scale_factor = scale_to_fit(fdf->map_data);
 	fdf->cam_ptr->scale_z = -0.16;
@@ -108,7 +106,7 @@ static void reset(t_fdf *fdf)
 	fdf->cam_ptr->colour_pallet = true;
 }
 
-static void key_change_colour(int keycode, t_fdf *fdf)
+static void	key_change_colour(int keycode, t_fdf *fdf)
 {
 	if (keycode == XK_space)
 	{
@@ -119,7 +117,7 @@ static void key_change_colour(int keycode, t_fdf *fdf)
 	}
 }
 
-static void key_translate(int keycode, t_fdf *fdf)
+static void	key_translate(int keycode, t_fdf *fdf)
 {
 	if (keycode == XK_W || keycode == 'w' || keycode == 'W')
 		fdf->cam_ptr->cam_position_y += 10;
@@ -131,7 +129,7 @@ static void key_translate(int keycode, t_fdf *fdf)
 		fdf->cam_ptr->cam_position_x -= 10;
 }
 
-static void key_projection(int keycode, t_fdf *fdf)
+static void	key_projection(int keycode, t_fdf *fdf)
 {
 	if (keycode == XK_I || keycode == 'i' || keycode == 'I')
 		fdf->cam_ptr->projection = ISOMETRIC;
@@ -167,24 +165,4 @@ int	key_handler(int keycode, t_fdf *fdf)
 		reset(fdf);
 	render_data(fdf);
 	return (0);
-//	mlx_hook(fdf->win_ptr, 17, 1L<<17, esc_close, &fdf);
-//	mlx_hook(fdf->win_ptr, 2, 1L<<19, click_close, &fdf);
-//	mlx_hook(fdf->win_ptr, 2, 1L<<0, rotate_keypress, &fdf);
 }
-
-//int	mouse_handler(int mousecode, t_fdf *fdf)
-//{
-//	float	scale_step;
-//
-//	scale_step = 0.1f;
-//	if (mousecode == 1)
-//		fdf->cam_ptr->scale_factor += scale_step;
-//	else if (mousecode == 2)
-//		fdf->cam_ptr->scale_factor -= scale_step;
-//	if (fdf->cam_ptr->scale_factor < 0.1f)
-//		fdf->cam_ptr->scale_factor = 0.1f;
-//	else if (fdf->cam_ptr->scale_factor > 10.0f)
-//		fdf->cam_ptr->scale_factor = 10.0f;
-//	render_data(fdf);
-//	return (0);
-//}
