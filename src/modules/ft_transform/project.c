@@ -10,14 +10,6 @@
 /*																			  */
 /* ************************************************************************** */
 #include "fdf.h"
-//#include <float.h>
-
-static float	float_abs(float nbr)
-{
-	if (nbr < 0)
-		return (nbr * (-1));
-	return (nbr);
-}
 
 static void	isometric(t_proj_params p)
 {
@@ -45,7 +37,7 @@ static void	perspective(t_proj_params p)
 	x = *(p.x);
 	y = *(p.y);
 	z_offset = p.transform_z;
-	if (float_abs(z + z_offset) < 0.001f)
+	if (fabsf(z + z_offset) < 0.001f)
 		z = 0.001f - z_offset;
 	scale = z_offset / (z + z_offset);
 	x *= scale;

@@ -13,14 +13,6 @@
 #include "libft.h"
 #include <math.h>
 
-float	max(float a, float b)
-{
-	if (a < b)
-		return (b);
-	else
-		return (a);
-}
-
 t_map	*map_init(void)
 {
 	t_map	*result;
@@ -75,28 +67,6 @@ t_img	*img_init(void	*mlx)
 	return (img);
 }
 
-float	min(float a, float b)
-{
-	if (a < b)
-		return (a);
-	else
-		return (b);
-}
-
-float	scale_to_fit(t_map *data)
-{
-	float	scale_x;
-	float	scale_y;
-	float	scale_factor;
-
-	scale_x = WINDOW_WIDTH / data->max_n;
-	scale_y = WINDOW_HEIGHT / data->max_m;
-	scale_factor = min(scale_x, scale_y);
-	if (scale_factor < 4)
-		return (2);
-	return (scale_factor / 2);
-}
-
 t_cam	*cam_init(t_map *data)
 {
 	t_cam	*cam;
@@ -115,26 +85,6 @@ t_cam	*cam_init(t_map *data)
 	cam->gamma = ANG_45;
 	cam->line_thickness = 1.5;
 	return (cam);
-}
-
-t_line	*line_init(t_cartesian start, t_cartesian end, t_fdf *fdf)
-{
-	t_line	*line;
-
-	line = malloc(sizeof(t_line));
-	if (NULL == line)
-		return (NULL);
-	line->start.x = start.x;
-	line->end.x = end.x;
-	line->start.y = start.y;
-	line->end.y = end.y;
-	line->start.colour = start.colour;
-	line->end.colour = end.colour;
-	line->start.z = start.z;
-	line->end.z = end.z;
-	line->transform_z = max((fdf->map_data->max_z - fdf->map_data->min_z), \
-			max(fdf->map_data->max_n, fdf->map_data->max_m));
-	return (line);
 }
 
 t_fdf	*fdf_init(char	*filepath)

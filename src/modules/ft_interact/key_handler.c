@@ -10,64 +10,6 @@
 /*																			  */
 /* ************************************************************************** */
 #include "fdf.h"
-#include <X11/keysym.h>
-#include <X11/X.h>
-
-static void	win_clean_free(t_fdf *fdf)
-{
-	if (fdf)
-	{
-		if (fdf->mlx_ptr)
-		{
-			if (fdf->img_ptr && fdf->img_ptr->img_buff)
-			{
-				mlx_destroy_image(fdf->mlx_ptr, fdf->img_ptr->img_buff);
-				fdf->img_ptr->img_buff = NULL;
-			}
-			mlx_destroy_window(fdf->mlx_ptr, fdf->win_ptr);
-			mlx_destroy_display(fdf->mlx_ptr);
-			free(fdf->mlx_ptr);
-		}
-		free(fdf->cam_ptr);
-		free(fdf->img_ptr);
-		if (fdf->map_data)
-		{
-			free_points(fdf->map_data->points, fdf->map_data->max_m);
-			free(fdf->map_data);
-		}
-		free(fdf);
-	}
-	exit(1);
-}
-
-void	esc_close(int keycode, t_fdf *fdf)
-{
-	if (keycode == XK_Escape)
-	{
-		win_clean_free(fdf);
-		exit(0);
-	}
-	return ;
-}
-
-int	close_window(t_fdf *fdf)
-{
-	win_clean_free(fdf);
-	exit(0);
-	return (0);
-}
-
-static void	key_rotate(int keycode, t_fdf *fdf)
-{
-	if (keycode == XK_Left)
-		fdf->cam_ptr->beta -= 0.1;
-	else if (keycode == XK_Right)
-		fdf->cam_ptr->beta += 0.1;
-	else if (keycode == XK_Up)
-		fdf->cam_ptr->alpha -= 0.1;
-	else if (keycode == XK_Down)
-		fdf->cam_ptr->alpha += 0.1;
-}
 
 static void	key_thickness(int keycode, t_fdf *fdf)
 {
@@ -79,17 +21,6 @@ static void	key_thickness(int keycode, t_fdf *fdf)
 		fdf->cam_ptr->line_thickness = 0.5;
 	else if (fdf->cam_ptr->line_thickness > 10)
 		fdf->cam_ptr->line_thickness = 10;
-}
-
-static void	key_scale(int keycode, t_fdf *fdf)
-{
-	float	scale_step;
-
-	scale_step = 1.1f;
-	if (keycode == XK_Page_Up)
-		fdf->cam_ptr->scale_factor *= scale_step;
-	else if (keycode == XK_Page_Down)
-		fdf->cam_ptr->scale_factor /= scale_step;
 }
 
 static void	reset(t_fdf *fdf)
@@ -104,39 +35,6 @@ static void	reset(t_fdf *fdf)
 	fdf->cam_ptr->line_thickness = 1.5;
 	fdf->cam_ptr->projection = ISOMETRIC;
 	fdf->cam_ptr->colour_pallet = true;
-}
-
-static void	key_change_colour(int keycode, t_fdf *fdf)
-{
-	if (keycode == XK_space)
-	{
-		if (fdf->cam_ptr->colour_pallet == true)
-			fdf->cam_ptr->colour_pallet = false;
-		else
-			fdf->cam_ptr->colour_pallet = true;
-	}
-}
-
-static void	key_translate(int keycode, t_fdf *fdf)
-{
-	if (keycode == XK_W || keycode == 'w' || keycode == 'W')
-		fdf->cam_ptr->cam_position_y += 10;
-	else if (keycode == XK_S || keycode == 's' || keycode == 'S')
-		fdf->cam_ptr->cam_position_y -= 10;
-	else if (keycode == XK_D || keycode == 'd' || keycode == 'D')
-		fdf->cam_ptr->cam_position_x += 10;
-	else if (keycode == XK_A || keycode == 'a' || keycode == 'A')
-		fdf->cam_ptr->cam_position_x -= 10;
-}
-
-static void	key_projection(int keycode, t_fdf *fdf)
-{
-	if (keycode == XK_I || keycode == 'i' || keycode == 'I')
-		fdf->cam_ptr->projection = ISOMETRIC;
-	else if (keycode == XK_P || keycode == 'p' || keycode == 'P')
-		fdf->cam_ptr->projection = PERSPECTIVE;
-	else if (keycode == XK_T || keycode == 't' || keycode == 'T')
-		fdf->cam_ptr->projection = TOP;
 }
 
 int	key_handler(int keycode, t_fdf *fdf)

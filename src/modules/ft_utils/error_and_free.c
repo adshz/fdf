@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*																			  */
 /*														  :::	   ::::::::   */
-/*	 utils.c											:+:		 :+:	:+:   */
+/*	 error_and_free.c									:+:		 :+:	:+:   */
 /*													  +:+ +:+		  +:+	  */
 /*	 By: szhong <marvin@42.fr>						+#+  +:+	   +#+		  */
 /*												  +#+#+#+#+#+	+#+			  */
-/*	 Created: 2024/08/01 15:15:49 by szhong			   #+#	  #+#			  */
-/*	 Updated: 2024/08/01 16:27:53 by szhong			  ###	########.fr		  */
+/*	 Created: 2024/07/29 13:18:08 by szhong			   #+#	  #+#			  */
+/*	 Updated: 2024/07/29 13:19:10 by szhong			  ###	########.fr		  */
 /*																			  */
 /* ************************************************************************** */
 #include "fdf.h"
@@ -47,21 +47,29 @@ void	clean_free(t_fdf *fdf)
 	exit(1);
 }
 
-void	move_origin(t_map *data)
+void	free_arr(char **arr)
 {
-	int	abc_x;
-	int	abc_y;
+	int	i;
 
-	abc_y = 0;
-	while (abc_y < data->max_m)
+	i = 0;
+	while (arr[i])
+		free(arr[i++]);
+	free(arr);
+	return ;
+}
+
+void	free_points(t_cartesian **points, int max_depth)
+{
+	int	i;
+
+	if (points == NULL)
+		return ;
+	i = 0;
+	while (i < max_depth + 1)
 	{
-		abc_x = 0;
-		while (abc_x < data->max_n)
-		{
-			data->points[abc_y][abc_x].x -= data->max_n / 2;
-			data->points[abc_y][abc_x].y -= data->max_m / 2;
-			abc_x++;
-		}
-		abc_y++;
+		free(points[i]);
+		i++;
 	}
+	free(points);
+	return ;
 }

@@ -6,7 +6,7 @@
 #    By: szhong <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/11 14:14:29 by szhong            #+#    #+#              #
-#    Updated: 2024/08/15 16:58:14 by szhong           ###   ########.fr        #
+#    Updated: 2024/08/16 16:08:12 by szhong           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,20 +17,25 @@ MLX		:=	-I ./minlibx-linux
 SRC_DIR		:=	./src
 SRCS		:=	\
 			main.c \
-			utils/parse_file/get_whole_file.c \
-			utils/error_and_free.c \
-			utils/init.c \
-			utils/parse_file/parse_utils.c \
-			utils/parse_file/parse_data.c \
-			utils/parse_file/parse_line.c \
-			utils/utils.c \
-			utils/key_handler.c \
-			utils/render_data.c \
-			utils/rotate.c \
-			utils/project.c \
-			utils/transform.c \
-			utils/colour_handler.c \
-			utils/prompt.c
+			modules/ft_colour/colour_handler.c \
+			modules/ft_colour/colour_utils.c \
+			modules/ft_init/init.c \
+			modules/ft_init/init_utils.c \
+			modules/ft_interact/key_functions.c \
+			modules/ft_interact/key_handler.c \
+			modules/ft_interact/prompt.c \
+			modules/ft_parse/get_whole_file.c \
+			modules/ft_parse/parse_utils.c \
+			modules/ft_parse/parse_data.c \
+			modules/ft_parse/parse_line.c \
+			modules/ft_render/render_data.c \
+			modules/ft_render/draw_slope.c \
+			modules/ft_render/render_utils.c \
+			modules/ft_transform/rotate.c \
+			modules/ft_transform/project.c \
+			modules/ft_transform/view_transform.c \
+			modules/ft_utils/error_and_free.c \
+			modules/ft_utils/win_free.c
 
 OBJ_DIR		:=	./obj
 OBJS		:=	$(addprefix $(OBJ_DIR)/, $(patsubst %.c, %.o, $(SRCS)))
