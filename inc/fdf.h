@@ -6,7 +6,7 @@
 /*   By: szhong <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 10:25:53 by szhong            #+#    #+#             */
-/*   Updated: 2024/08/15 17:09:10 by szhong           ###   ########.fr       */
+/*   Updated: 2024/08/16 12:08:51 by szhong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FDF_H
@@ -41,6 +41,7 @@ typedef struct s_draw_params
 	int	x;
 	int	y;
 	int	draw_colour;
+	int	step;
 }	t_draw_params;
 
 //project module
