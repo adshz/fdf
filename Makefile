@@ -6,13 +6,13 @@
 #    By: szhong <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/11 14:14:29 by szhong            #+#    #+#              #
-#    Updated: 2024/08/16 16:08:12 by szhong           ###   ########.fr        #
+#    Updated: 2024/08/19 11:01:39 by szhong           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		:=	fdf
 CC		:=	cc 
-CFLAGS		:=	-Wall -Werror -Werror -Wno-unused-function -g
+CFLAGS		:=	-Wall -Werror -Werror -g
 MLX		:=	-I ./minlibx-linux 
 SRC_DIR		:=	./src
 SRCS		:=	\

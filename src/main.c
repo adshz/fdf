@@ -6,27 +6,20 @@
 /*   By: szhong <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 10:37:35 by szhong            #+#    #+#             */
-/*   Updated: 2024/08/15 10:37:38 by szhong           ###   ########.fr       */
+/*   Updated: 2024/08/19 11:01:01 by szhong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#define _GNU_SOURCE
-#include <dlfcn.h>
-#include <link.h>
-#include <math.h>
-#include <fcntl.h>
-#include "libft.h"
 #include "fdf.h"
-#include <assert.h> 
-#include <stdio.h>
-
-#include "../minilibx-linux/mlx.h"
 
 int	main(int argc, char *argv[])
 {
 	t_fdf	*fdf;
 
 	if (argc != 2)
+	{
 		ft_putendl_fd("ERROR", 2);
+		exit(0);
+	}
 	fdf = fdf_init(argv[1]);
 	render_data(fdf);
 	mlx_key_hook(fdf->win_ptr, &key_handler, fdf);
