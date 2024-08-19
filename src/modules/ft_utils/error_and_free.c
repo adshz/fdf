@@ -10,6 +10,7 @@
 /*																			  */
 /* ************************************************************************** */
 #include "fdf.h"
+#include "libft.h"
 
 void	clean_up(t_fdf **fdf)
 {
@@ -18,7 +19,7 @@ void	clean_up(t_fdf **fdf)
 			|| (*fdf)->win_ptr == NULL)
 	{
 		clean_free((*fdf));
-		exit(1);
+		error_handler(3);
 	}
 }
 
@@ -44,7 +45,6 @@ void	clean_free(t_fdf *fdf)
 		}
 		free(fdf);
 	}
-	exit(1);
 }
 
 void	free_arr(char **arr)
@@ -72,4 +72,27 @@ void	free_points(t_cartesian **points, int max_depth)
 	}
 	free(points);
 	return ;
+}
+
+void	error_handler(int code)
+{
+	if (code == 0)
+		ft_putendl_fd("The End of Program. See you Next time!", 1);
+	else if (code == 1)
+	{
+		ft_putendl_fd("ERROR: Invalid Number of Argument", 2);
+		ft_putendl_fd("Usage: ./fdf <Path to the filename>", 1);
+		exit(0);
+	}
+	else if (code == 2)
+		ft_putendl_fd("ERROR: Invalid Input File", 2);
+	else if (code == 3)
+		ft_putendl_fd("ERROR: Initialisation", 2);
+	else if (code == 4)
+		ft_putendl_fd("ERROR: Data Parsing Failure", 2);
+	else if (code == 5)
+		ft_putendl_fd("ERROR: Data Rendering Failure", 2);
+	else if (code == 7)
+		ft_putendl_fd("ERROR", 2);
+	exit(code);
 }

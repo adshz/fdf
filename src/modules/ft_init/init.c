@@ -12,6 +12,7 @@
 #include "fdf.h"
 #include "libft.h"
 #include <math.h>
+#include <limits.h>
 
 t_map	*map_init(void)
 {
@@ -26,6 +27,7 @@ t_map	*map_init(void)
 	result->min_z = 0;
 	result->points = NULL;
 	result->current_row = 0;
+	result->parse_error = FALSE;
 	return (result);
 }
 
@@ -93,11 +95,13 @@ t_fdf	*fdf_init(char	*filepath)
 
 	fdf = (t_fdf *)ft_calloc(1, sizeof(t_fdf));
 	if (fdf == NULL)
-	{
-		perror("fdf initialisation failed");
-		exit(1);
-	}
+		error_handler(3);
 	fdf->map_data = parse_data(filepath);
+	if (!fdf->map_data)
+	{
+		free(fdf);
+		error_handler(4);
+	}
 	move_origin(fdf->map_data);
 	fdf->mlx_ptr = mlx_init();
 	fdf->win_ptr = mlx_new_window(fdf->mlx_ptr, WINDOW_WIDTH, \

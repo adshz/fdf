@@ -6,7 +6,7 @@
 /*   By: szhong <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 16:16:40 by szhong            #+#    #+#             */
-/*   Updated: 2024/08/16 16:25:32 by szhong           ###   ########.fr       */
+/*   Updated: 2024/08/19 19:31:48 by szhong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FDF_TYPES_H
@@ -108,6 +108,7 @@ typedef struct s_map
 	int			max_z;
 	int			min_z;
 	int			current_row;
+	int			parse_error;
 }	t_map;
 
 typedef struct s_img

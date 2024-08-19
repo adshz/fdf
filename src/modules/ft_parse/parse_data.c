@@ -10,83 +10,51 @@
 /*																			  */
 /* ************************************************************************** */
 #include "fdf.h"
-#include "libft.h"
 
-static void	process_line(char **line_ptr, t_map *data, \
-		void (*process_func)(char *, t_map *))
-{
-	char	*ptr_nextline;
-	size_t	line_length;
-
-	ptr_nextline = ft_strchr(*line_ptr, '\n');
-	if (ptr_nextline)
-	{
-		line_length = ptr_nextline - *line_ptr;
-		*ptr_nextline = '\0';
-	}
-	else
-		line_length = ft_strlen(*line_ptr);
-	if (line_length > 0 || data->max_m == 0)
-		process_func(*line_ptr, data);
-	if (ptr_nextline)
-	{
-		*ptr_nextline = '\n';
-		*line_ptr = ptr_nextline + 1;
-	}
-	else
-		*line_ptr = NULL;
-}
-
-static void	count_line(char *line, t_map *data)
-{
-	if (data->max_m == 0)
-		data->max_n = count_cols(line, ' ');
-	data->max_m++;
-}
-
-static void	count_dimensions(char *content, t_map *data)
-{
-	char	*line;
-
-	line = content;
-	while (line && *line)
-		process_line(&line, data, count_line);
-}
-
-static void	parse_content(char *content, t_map *data)
-{
-	char	*line;
-	int		row;
-
-	row = 0;
-	line = content;
-	while (line && *line && row < data->max_m)
-		process_line(&line, data, parse_line_wrapper);
-}
-
-t_map	*parse_data(char *filepath)
+static t_map	*process_file_content(char *file_content)
 {
 	t_map	*data;
-	char	*file_content;
 
 	data = map_init();
 	if (!data)
 		return (NULL);
-	file_content = get_whole_file(filepath);
-	if (!file_content)
+	count_dimensions(file_content, data);
+	if (data->max_m == 0 || data->max_n == 0)
 	{
 		free(data);
 		return (NULL);
 	}
-	count_dimensions(file_content, data);
 	data->points = cartesian_init(data->max_n, data->max_m);
 	if (!data->points)
 	{
-		free(file_content);
 		free(data);
 		return (NULL);
 	}
 	parse_content(file_content, data);
+	if (data->parse_error)
+	{
+		free_points(data->points, data->max_m);
+		free(data);
+		return (NULL);
+	}
+	return (data);
+}
+
+t_map	*parse_data(char *filepath)
+{
+	char	*file_content;
+	t_map	*data;
+
+	data = NULL;
+	file_content = get_whole_file(filepath);
+	if (!file_content || !*file_content)
+	{
+		free(data);
+		if (file_content)
+			free(file_content);
+		return (NULL);
+	}
+	data = process_file_content(file_content);
 	free(file_content);
 	return (data);
 }

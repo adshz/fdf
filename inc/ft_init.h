@@ -6,7 +6,7 @@
 /*   By: szhong <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 14:43:40 by szhong            #+#    #+#             */
-/*   Updated: 2024/08/16 16:18:52 by szhong           ###   ########.fr       */
+/*   Updated: 2024/08/19 18:33:09 by szhong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_INIT_H
@@ -23,5 +23,6 @@ t_cam		*cam_init(t_map *data);
 t_line		*line_init(t_cartesian start, t_cartesian end, t_fdf *fdf);
 float		scale_to_fit(t_map *data);
 t_colour	*colour_init(t_cartesian start, t_cartesian end);
+void		move_origin(t_map *data);
 
 #endif

@@ -67,7 +67,10 @@ static char	*process_chunks(int fd)
 	{
 		chunk = read_chunk(fd, &bytes_read);
 		if (!chunk)
-			break ;
+		{
+			free(content);
+			return (NULL);
+		}
 		if (!content)
 			content = chunk;
 		else
@@ -86,7 +89,7 @@ char	*get_whole_file(const char *filename)
 	char	*content;
 
 	fd = open(filename, O_RDONLY);
-	if (fd == -1)
+	if (fd < 0)
 		return (NULL);
 	content = process_chunks(fd);
 	close(fd);

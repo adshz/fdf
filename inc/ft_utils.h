@@ -6,7 +6,7 @@
 /*   By: szhong <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 14:50:41 by szhong            #+#    #+#             */
-/*   Updated: 2024/08/16 16:28:23 by szhong           ###   ########.fr       */
+/*   Updated: 2024/08/19 17:39:44 by szhong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FT_UTILS_H
@@ -29,4 +29,5 @@ void	key_scale(int keycode, t_fdf *fdf);
 void	key_translate(int keycode, t_fdf *fdf);
 void	key_projection(int keycode, t_fdf *fdf);
 void	key_change_colour(int keycode, t_fdf *fdf);
+void	error_handler(int code);
 #endif
