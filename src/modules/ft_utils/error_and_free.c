@@ -92,7 +92,7 @@ void	error_handler(int code)
 		ft_putendl_fd("ERROR: Data Parsing Failure", 2);
 	else if (code == 5)
 		ft_putendl_fd("ERROR: Data Rendering Failure", 2);
-	else if (code == 7)
+	else if (code == 6)
 		ft_putendl_fd("ERROR", 2);
 	exit(code);
 }

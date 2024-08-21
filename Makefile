@@ -6,9 +6,20 @@
 #    By: szhong <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/11 14:14:29 by szhong            #+#    #+#              #
-#    Updated: 2024/08/19 11:01:39 by szhong           ###   ########.fr        #
+#    Updated: 2024/08/19 21:07:47 by szhong           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+#Define colour
+DF = \033[0;39m
+GRAY = \033[0;90m
+RED = \033[0;91m
+GREEN = \033[0;92m
+MAGENTA = \033[0;95m
+YELLOW = \033[0;93m
+CYAN =\033[0;96m
+WHITE = \033[0;97m
+BOLD = \033[91m
+ORANGE = \033[38;5;208m
 
 NAME		:=	fdf
 CC		:=	cc 
@@ -50,7 +61,7 @@ all:$(NAME)
 
 $(NAME): $(OBJS) LIBFT ctags
 	@$(CC) $(CFLAGS) $(OBJS) $(ALL_LIBS) -o $(NAME) 
-	@echo "[FDF] Build Completed"
+	@echo "$(BOLD)$(YELLOW)[FDF] $(GREEN)Build Completed$(DF)"
 
 LIBFT:
 	@make --no-print-directory -C $(LIBFT_PATH) all
@@ -74,12 +85,12 @@ run:
 clean:
 	@make --no-print-directory -C $(LIBFT_PATH) clean
 	@rm -rf $(OBJ_DIR)
-	@echo "[FDF] Objects Removed"
+	@echo "$(CYAN)[FDF] Objects Removed$(DF)"
 
 fclean: clean
 	@make --no-print-directory -C $(LIBFT_PATH) fclean
-	@echo "[FDF] Everything Removed"
-	@echo "========Project Reset========"
+	@echo "$(BOLD)$(RED)[FDF] Everything Removed$(DF)"
+	@echo "$(BOLD)$(ORANGE)========Project Reset========$(DF)"
 	@rm -f $(NAME)
 
 re: fclean all

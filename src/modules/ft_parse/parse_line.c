@@ -85,9 +85,9 @@ static void	parse_line(char *line, t_cartesian *point, int row, t_map *data)
 		parse_z_and_colour(split[col], &point[col], data);
 		col++;
 	}
-	free_arr(split);
 	if (col < data->max_n || (col == data->max_n && split[col] != NULL))
 		data->parse_error = TRUE;
+	free_arr(split);
 	return ;
 }
 
