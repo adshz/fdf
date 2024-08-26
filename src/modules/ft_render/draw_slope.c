@@ -6,7 +6,7 @@
 /*   By: szhong <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 13:39:19 by szhong            #+#    #+#             */
-/*   Updated: 2024/08/26 17:54:55 by szhong           ###   ########.fr       */
+/*   Updated: 2024/08/26 18:15:51 by szhong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "fdf.h"
@@ -71,10 +71,7 @@ void	draw_high_slope(t_fdf *fdf, t_cartesian start, t_cartesian end, \
 	{
 		delta_y = end.y - start.y;
 		if (delta_y == 0)
-		{
-			clean_free(fdf);
-			error_handler(5);
-		}
+			delta_y = 1;
 		p.draw_colour = get_colour(color, p.y - start.y, delta_y);
 		draw_thick_pixel(fdf, p.x, p.y, p.draw_colour);
 		if (p.diff > 0)
