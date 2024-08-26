@@ -6,7 +6,7 @@
 /*   By: szhong <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:30:07 by szhong            #+#    #+#             */
-/*   Updated: 2024/08/16 15:35:15 by szhong           ###   ########.fr       */
+/*   Updated: 2024/08/21 21:58:19 by szhong           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_colour.h"
@@ -47,6 +47,8 @@ int	get_colour(t_colour *colour, int i_line, int line_size)
 	int		b;
 	int		c_s_col;
 
+	if (line_size == 0 || i_line < 0 || i_line > line_size)
+		return (colour->start_colour);
 	progress = (float)i_line / line_size;
 	c_s_col = colour->start_colour;
 	r = ((c_s_col >> 16) & 0xFF) + (int)(colour->delta_r * progress);

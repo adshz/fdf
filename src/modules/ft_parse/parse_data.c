@@ -11,6 +11,13 @@
 /* ************************************************************************** */
 #include "fdf.h"
 
+long long	absolute(long long nbr)
+{
+	if (nbr < 0)
+		return (nbr * (-1));
+	return (nbr);
+}
+
 static t_map	*process_file_content(char *file_content)
 {
 	t_map	*data;

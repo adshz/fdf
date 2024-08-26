@@ -28,19 +28,29 @@ static int	is_valid_z(const char *str)
 		i++;
 	}
 	num = ft_atol(str);
-	if (num > LONG_MAX || num < LONG_MIN)
+	if (num > INT_MAX || num < INT_MIN)
 		return (PARSE_FAILURE);
 	return (PARSE_SUCCESS);
 }
 
 static void	parse_z(char *token, t_cartesian *point, t_map *data)
 {
+	long long	z_value;
+
 	if (!is_valid_z(token))
 	{
 		data->parse_error = TRUE;
 		return ;
 	}
-	point->z = (float)ft_atoi(token);
+	z_value = ft_atol(token);
+	if (z_value > INT_MAX || z_value < INT_MIN || \
+			absolute(z_value) > WINDOW_WIDTH || \
+			absolute(z_value) > WINDOW_HEIGHT)
+	{
+		data->parse_error = TRUE;
+		return ;
+	}
+	point->z = (float)z_value;
 	point->colour = -1;
 }
 

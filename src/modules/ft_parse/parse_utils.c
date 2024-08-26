@@ -11,15 +11,6 @@
 /* ************************************************************************** */
 #include "fdf.h"
 
-//int	ft_arrlen(char **arr)
-//{
-//	size_t	i;
-//
-//	i = 0;
-//	while (arr[i])
-//		i++;
-//	return (i);
-//}
 void	process_line(char **line_ptr, t_map *data, \
 		void (*process_func)(char *, t_map *))
 {

@@ -27,6 +27,8 @@ void	clean_free(t_fdf *fdf)
 {
 	if (fdf)
 	{
+		if (fdf->img_ptr->line_segment)
+			free(fdf->img_ptr->line_segment);
 		if (fdf->mlx_ptr && fdf->win_ptr)
 			mlx_destroy_window(fdf->mlx_ptr, fdf->win_ptr);
 		if (fdf->mlx_ptr && fdf->img_ptr && fdf->img_ptr->img_buff)
