@@ -108,8 +108,8 @@ The program implements proper memory management with:
 
 ## License
 
-This project is part of the 42 school curriculum and follows its guidelines and restrictions.
+This project is part of the 42 London and follows its guidelines and restrictions.
 
 ## Author
 
-Created by szhong (42 school)
+Created by szhong (42 London)
