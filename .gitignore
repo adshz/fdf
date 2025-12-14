@@ -1,28 +1,30 @@
-# Prerequisites
-*.d
+# ========================================
+# FDF .gitignore
+# ========================================
+
+# Build output
+obj/
+fdf
+
+# Auto-downloaded dependencies
+MLX42/
+glfw/
+libft/
 
 # Object files
 *.o
 *.ko
 *.obj
 *.elf
-
-# Linker output
-*.ilk
-*.map
-*.exp
-
-# Precompiled Headers
-*.gch
-*.pch
+*.d
 
 # Libraries
-*.lib
 *.a
+*.lib
 *.la
 *.lo
 
-# Shared objects (inc. Windows DLLs)
+# Shared objects
 *.dll
 *.so
 *.so.*
@@ -32,9 +34,6 @@
 *.exe
 *.out
 *.app
-*.i*86
-*.x86_64
-*.hex
 
 # Debug files
 *.dSYM/
@@ -42,23 +41,23 @@
 *.idb
 *.pdb
 
-# Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
-block/
-tags
-libft/.git/
-test/
+# Editor/IDE
 *.swp
-fdf
-time_fdf
-src/implementation_get_whole_file.c
-src/test_file.txt
-src/test_file2.txt
-archive/
+*.swo
+*~
+.vscode/
+.idea/
+*.sublime-*
+tags
 .tags/
+
+# macOS
+.DS_Store
+._*
+
+# Test files
+test/
+*.test
+
+# Archives
+archive/

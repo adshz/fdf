@@ -113,11 +113,7 @@ typedef struct s_map
 
 typedef struct s_img
 {
-	void	*img_buff;
-	int		bits_per_pixel;
-	int		line_len;
-	int		endian;
-	char	*mem_addr;
+	void	*img;
 	t_line	*line_segment;
 }	t_img;
 
@@ -138,8 +134,7 @@ typedef struct s_display
 typedef struct s_fdf
 {
 	t_map	*map_data;
-	void	*mlx_ptr;
-	void	*win_ptr;
+	void	*mlx;
 	t_img	*img_ptr;
 	t_cam	*cam_ptr;
 }	t_fdf;

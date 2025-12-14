@@ -18,7 +18,7 @@
 t_cartesian	**cartesian_init(int max_width, int max_depth);
 t_fdf		*fdf_init(char *filepath);
 t_map		*map_init(void);
-t_img		*img_init(void	*mlx);
+t_img		*img_init(void *mlx);
 t_cam		*cam_init(t_map *data);
 t_line		*line_init(t_cartesian start, t_cartesian end, t_fdf *fdf);
 float		scale_to_fit(t_map *data);

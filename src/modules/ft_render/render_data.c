@@ -52,6 +52,7 @@ static void	draw_line_segment(t_fdf *fdf, t_cartesian start, t_cartesian end)
 	draw_line_bresenham(fdf, fdf->img_ptr->line_segment->start, \
 			fdf->img_ptr->line_segment->end);
 	free(fdf->img_ptr->line_segment);
+	fdf->img_ptr->line_segment = NULL;
 }
 
 void	render_data(t_fdf *fdf)
@@ -76,7 +77,5 @@ void	render_data(t_fdf *fdf)
 		}
 		row++;
 	}
-	mlx_put_image_to_window(fdf->mlx_ptr, fdf->win_ptr, fdf->img_ptr->img_buff, \
-			0, 0);
 	print_menu(fdf);
 }

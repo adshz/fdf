@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/*																			  */
-/*														  :::	   ::::::::   */
-/*	 error_and_free.c									:+:		 :+:	:+:   */
-/*													  +:+ +:+		  +:+	  */
-/*	 By: szhong <marvin@42.fr>						+#+  +:+	   +#+		  */
-/*												  +#+#+#+#+#+	+#+			  */
-/*	 Created: 2024/07/29 13:18:08 by szhong			   #+#	  #+#			  */
-/*	 Updated: 2024/07/29 13:19:10 by szhong			  ###	########.fr		  */
-/*																			  */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error_and_free.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: szhong <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/29 13:18:08 by szhong            #+#    #+#             */
+/*   Updated: 2024/07/29 13:19:10 by szhong           ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 #include "fdf.h"
 #include "libft.h"
@@ -15,8 +15,7 @@
 void	clean_up(t_fdf **fdf)
 {
 	if ((*fdf)->map_data == NULL || (*fdf)->img_ptr == NULL || \
-			(*fdf)->cam_ptr == NULL || (*fdf)->mlx_ptr == NULL \
-			|| (*fdf)->win_ptr == NULL)
+			(*fdf)->cam_ptr == NULL || (*fdf)->mlx == NULL)
 	{
 		clean_free((*fdf));
 		error_handler(3);
@@ -27,17 +26,10 @@ void	clean_free(t_fdf *fdf)
 {
 	if (fdf)
 	{
-		if (fdf->img_ptr->line_segment)
+		if (fdf->img_ptr && fdf->img_ptr->line_segment)
 			free(fdf->img_ptr->line_segment);
-		if (fdf->mlx_ptr && fdf->win_ptr)
-			mlx_destroy_window(fdf->mlx_ptr, fdf->win_ptr);
-		if (fdf->mlx_ptr && fdf->img_ptr && fdf->img_ptr->img_buff)
-			mlx_destroy_image(fdf->mlx_ptr, fdf->img_ptr->img_buff);
-		if (fdf->mlx_ptr)
-		{
-			mlx_destroy_display(fdf->mlx_ptr);
-			free(fdf->mlx_ptr);
-		}
+		if (fdf->mlx)
+			mlx_terminate(fdf->mlx);
 		free(fdf->cam_ptr);
 		free(fdf->img_ptr);
 		if (fdf->map_data)
@@ -76,25 +68,45 @@ void	free_points(t_cartesian **points, int max_depth)
 	return ;
 }
 
+static void	print_usage(void)
+{
+	ft_putendl_fd("\033[1;36m", 1);
+	ft_putendl_fd("  ███████╗██████╗ ███████╗", 1);
+	ft_putendl_fd("  ██╔════╝██╔══██╗██╔════╝", 1);
+	ft_putendl_fd("  █████╗  ██║  ██║█████╗  ", 1);
+	ft_putendl_fd("  ██╔══╝  ██║  ██║██╔══╝  ", 1);
+	ft_putendl_fd("  ██║     ██████╔╝██║     ", 1);
+	ft_putendl_fd("  ╚═╝     ╚═════╝ ╚═╝     \033[0m", 1);
+	ft_putendl_fd("", 1);
+	ft_putendl_fd("\033[1;33mUsage:\033[0m ./fdf <map_file>", 1);
+	ft_putendl_fd("", 1);
+	ft_putendl_fd("\033[1;33mExamples:\033[0m", 1);
+	ft_putendl_fd("  ./fdf maps/42.fdf", 1);
+	ft_putendl_fd("  ./fdf maps/pyramide.fdf", 1);
+	ft_putendl_fd("  ./fdf maps/elem-col.fdf", 1);
+	ft_putendl_fd("", 1);
+	ft_putendl_fd("\033[1;33mAvailable maps:\033[0m maps/", 1);
+}
+
 void	error_handler(int code)
 {
 	if (code == 0)
-		ft_putendl_fd("The End of Program. See you Next time!", 1);
+		ft_putendl_fd("\033[1;32mGoodbye!\033[0m", 1);
 	else if (code == 1)
 	{
-		ft_putendl_fd("ERROR: Invalid Number of Argument", 2);
-		ft_putendl_fd("Usage: ./fdf <Path to the filename>", 1);
+		ft_putendl_fd("\033[1;31mError: Invalid number of arguments\033[0m", 2);
+		print_usage();
 		exit(0);
 	}
 	else if (code == 2)
-		ft_putendl_fd("ERROR: Invalid Input File", 2);
+		ft_putendl_fd("\033[1;31mError: Cannot open file\033[0m", 2);
 	else if (code == 3)
-		ft_putendl_fd("ERROR: Initialisation", 2);
+		ft_putendl_fd("\033[1;31mError: Initialization failed\033[0m", 2);
 	else if (code == 4)
-		ft_putendl_fd("ERROR: Data Parsing Failure", 2);
+		ft_putendl_fd("\033[1;31mError: Invalid map format\033[0m", 2);
 	else if (code == 5)
-		ft_putendl_fd("ERROR: Data Rendering Failure", 2);
+		ft_putendl_fd("\033[1;31mError: Rendering failed\033[0m", 2);
 	else if (code == 6)
-		ft_putendl_fd("ERROR", 2);
+		ft_putendl_fd("\033[1;31mError\033[0m", 2);
 	exit(code);
 }

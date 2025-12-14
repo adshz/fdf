@@ -2,114 +2,178 @@
 
 ![Demo](demo.gif)
 
-FDF is a 3D wireframe mesh viewer that renders height maps in different projections. This project demonstrates the use of the MLX (MiniLibX) graphics library to create an interactive 3D visualization tool.
+A 3D wireframe mesh viewer that renders height maps using isometric, perspective, and top-down projections. Built with [MLX42](https://github.com/codam-coding-college/MLX42), a modern cross-platform graphics library.
 
-## Features
+## Supported Platforms
 
-- Multiple view modes:
-  - Isometric view
-  - Perspective view
-  - Top view
-- Interactive controls:
-  - Zoom in/out (Page Up/Down)
-  - Move up/down (W/S keys)
-  - Move left/right (A/D keys)
-  - Rotate view (Arrow keys)
-  - Adjust line thickness (+/- keys)
-  - Toggle color mode (Space bar)
-  - Reset view (R key)
-- Support for height maps with color information
-- Automatic scaling to fit window
-- Smooth line rendering with Bresenham's algorithm
-- Memory leak protection and proper cleanup
+| Platform | Status |
+|----------|--------|
+| macOS (Intel) | ✅ Supported |
+| macOS (Apple Silicon M1-M5) | ✅ Supported |
+| Linux (X11) | ✅ Supported |
+| Windows (WSL) | ✅ Supported |
 
-## Requirements
+## Prerequisites
 
-- macOS (MLX library is macOS-specific)
-- GCC compiler
-- Make
+You only need **CMake** and a C compiler. All other dependencies are downloaded automatically.
 
-## Installation
+<details>
+<summary><b>macOS</b></summary>
 
-1. Clone the repository:
 ```bash
-git clone [https://github.com/adshz/fdf.git]
+# Install Xcode Command Line Tools
+xcode-select --install
+
+# Install Homebrew (if not installed)
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Install CMake
+brew install cmake
+```
+</details>
+
+<details>
+<summary><b>Linux (Debian/Ubuntu)</b></summary>
+
+```bash
+sudo apt-get update
+sudo apt-get install build-essential cmake git
+```
+</details>
+
+<details>
+<summary><b>Linux (Fedora)</b></summary>
+
+```bash
+sudo dnf install gcc make cmake git
+```
+</details>
+
+<details>
+<summary><b>Linux (Arch)</b></summary>
+
+```bash
+sudo pacman -S base-devel cmake git
+```
+</details>
+
+## Quick Start
+
+```bash
+# Clone the repository
+git clone https://github.com/adshz/fdf.git
 cd fdf
-```
 
-2. Compile the project:
-```bash
+# Build (automatically downloads all dependencies)
 make
+
+# Run
+./fdf maps/42.fdf
 ```
 
-## Usage
+## Build Commands
 
-Run the program with a map file as an argument:
-```bash
-./fdf [map_file]
-```
-
-### Map File Format
-
-The map file should contain a grid of numbers representing height values. Each number can optionally be followed by a color in hexadecimal format (e.g., "0,0xFFFFFF").
-
-Example map file:
-```
-0 1 2 3
-1 2 3 4
-2 3 4 5
-```
-
-Or with colors:
-```
-0,0xFFFFFF 1,0xFF0000 2,0x00FF00
-1,0x0000FF 2,0xFFFF00 3,0xFF00FF
-2,0x00FFFF 3,0xFFFFFF 4,0x000000
-```
+| Command | Description |
+|---------|-------------|
+| `make` | Build the project |
+| `make run` | Build and run with default map |
+| `make clean` | Remove object files |
+| `make fclean` | Remove all build artifacts |
+| `make re` | Rebuild from scratch |
+| `make mrproper` | Full clean including dependencies |
+| `make info` | Show build configuration |
 
 ## Controls
 
-- **ESC**: Exit program
-- **Page Up/Down**: Zoom in/out
-- **W/S**: Move up/down
-- **A/D**: Move left/right
-- **Arrow Keys**: Rotate view
-- **+/-**: Increase/decrease line thickness
-- **I**: Switch to Isometric view
-- **P**: Switch to Perspective view
-- **T**: Switch to Top view
-- **Space**: Toggle color mode
-- **R**: Reset view
+| Key | Action |
+|-----|--------|
+| `ESC` | Exit |
+| `W` `A` `S` `D` | Move camera |
+| `↑` `↓` `←` `→` | Rotate view |
+| `Page Up/Down` | Zoom in/out |
+| `=` / `-` | Line thickness |
+| `I` | Isometric view |
+| `P` | Perspective view |
+| `T` | Top-down view |
+| `Space` | Toggle colors |
+| `R` | Reset view |
+
+## Map Format
+
+Maps are text files with height values. Optional hex colors can be added.
+
+```
+0  0  0  0  0
+0  5  5  5  0
+0  5 10  5  0
+0  5  5  5  0
+0  0  0  0  0
+```
+
+With colors:
+```
+0,0xFF0000  0,0x00FF00  0,0x0000FF
+```
+
+Sample maps are in the `maps/` directory.
 
 ## Project Structure
 
-- `src/main.c`: Main program entry point
-- `src/modules/ft_init/`: Initialization functions
-- `src/modules/ft_transform/`: View transformation functions
-- `src/modules/ft_parse/`: Map file parsing functions
-- `src/modules/ft_render/`: Drawing functions
-- `src/modules/ft_interact/`: User interaction functions
-- `src/modules/ft_utils/`: Utility functions
+```
+fdf/
+├── src/
+│   ├── main.c
+│   └── modules/
+│       ├── ft_colour/      # Color gradients
+│       ├── ft_init/        # Initialization
+│       ├── ft_interact/    # Input handling
+│       ├── ft_parse/       # Map parsing
+│       ├── ft_render/      # Bresenham line drawing
+│       ├── ft_transform/   # 3D projections
+│       └── ft_utils/       # Utilities
+├── inc/                    # Headers
+├── maps/                   # Sample maps
+├── MLX42/                  # Graphics lib (auto-downloaded)
+├── glfw/                   # Window lib (auto-downloaded)
+├── libft/                  # C library (auto-downloaded)
+└── Makefile
+```
 
-## Error Handling
+## Troubleshooting
 
-The program includes comprehensive error handling for:
-- Invalid map files
-- Memory allocation failures
-- Window creation failures
-- Invalid input parameters
+<details>
+<summary><b>CMake not found</b></summary>
 
-## Memory Management
+```bash
+# macOS
+brew install cmake
 
-The program implements proper memory management with:
-- Cleanup of MLX resources
-- Freeing of allocated memory
-- Protection against memory leaks
+# Linux
+sudo apt-get install cmake
+```
+</details>
+
+<details>
+<summary><b>Build fails / Dependencies issues</b></summary>
+
+```bash
+make mrproper
+make
+```
+</details>
+
+<details>
+<summary><b>OpenGL errors (Linux)</b></summary>
+
+```bash
+sudo apt-get install libgl1-mesa-dev
+```
+</details>
 
 ## License
 
-This project is part of the 42 London and follows its guidelines and restrictions.
+MIT License - see [LICENSE](LICENSE)
 
 ## Author
 
-Created by szhong (42 London)
+**szhong** @ 42 London

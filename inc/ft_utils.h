@@ -18,16 +18,15 @@ float	min(float a, float b);
 float	max(float a, float b);
 void	clean_up(t_fdf **fdf);
 void	clean_free(t_fdf *fdf);
-void	key_close(t_fdf *fdf);
-void	esc_close(int keycode, t_fdf *fdf);
-int		close_window(t_fdf *fdf);
-int		key_handler(int keycode, t_fdf *fdf);
+void	win_clean_free(t_fdf *fdf);
+void	close_window(void *param);
+void	key_handler(mlx_key_data_t keydata, void *param);
 void	print_menu(t_fdf *fdf);
-void	key_rotate(int keycode, t_fdf *fdf);
-void	key_scale(int keycode, t_fdf *fdf);
-void	key_translate(int keycode, t_fdf *fdf);
-void	key_projection(int keycode, t_fdf *fdf);
-void	key_change_colour(int keycode, t_fdf *fdf);
+void	key_rotate(keys_t keycode, t_fdf *fdf);
+void	key_scale(keys_t keycode, t_fdf *fdf);
+void	key_translate(keys_t keycode, t_fdf *fdf);
+void	key_projection(keys_t keycode, t_fdf *fdf);
+void	key_change_colour(keys_t keycode, t_fdf *fdf);
 void	error_handler(int code);
 
 #endif

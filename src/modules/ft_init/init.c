@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/*																			  */
-/*														  :::	   ::::::::   */
-/*	 init.c												:+:		 :+:	:+:   */
-/*													  +:+ +:+		  +:+	  */
-/*	 By: szhong <marvin@42.fr>						+#+  +:+	   +#+		  */
-/*												  +#+#+#+#+#+	+#+			  */
-/*	 Created: 2024/07/29 14:19:33 by szhong			   #+#	  #+#			  */
-/*	 Updated: 2024/08/01 18:02:23 by szhong			  ###	########.fr		  */
-/*																			  */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: szhong <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/29 14:19:33 by szhong            #+#    #+#             */
+/*   Updated: 2024/08/01 18:02:23 by szhong           ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 #include "fdf.h"
 #include "libft.h"
@@ -55,17 +55,30 @@ t_cartesian	**cartesian_init(int max_width, int max_depth)
 	return (points);
 }
 
-t_img	*img_init(void	*mlx)
+t_img	*img_init(void *mlx_ptr)
 {
-	t_img	*img;
+	t_img		*img;
+	mlx_image_t	*mlx_img;
+	mlx_t		*mlx;
 
+	mlx = (mlx_t *)mlx_ptr;
 	img = (t_img *)ft_calloc(1, sizeof(t_img));
 	if (img == NULL)
 		return (NULL);
-	img->img_buff = mlx_new_image(mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
-	img->mem_addr = mlx_get_data_addr(img->img_buff, &img->bits_per_pixel, \
-			&img->line_len, &img->endian);
+	mlx_img = mlx_new_image(mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
+	if (!mlx_img)
+	{
+		free(img);
+		return (NULL);
+	}
+	img->img = mlx_img;
 	img->line_segment = NULL;
+	if (mlx_image_to_window(mlx, mlx_img, 0, 0) < 0)
+	{
+		mlx_delete_image(mlx, mlx_img);
+		free(img);
+		return (NULL);
+	}
 	return (img);
 }
 
@@ -89,7 +102,7 @@ t_cam	*cam_init(t_map *data)
 	return (cam);
 }
 
-t_fdf	*fdf_init(char	*filepath)
+t_fdf	*fdf_init(char *filepath)
 {
 	t_fdf	*fdf;
 
@@ -103,10 +116,15 @@ t_fdf	*fdf_init(char	*filepath)
 		error_handler(4);
 	}
 	move_origin(fdf->map_data);
-	fdf->mlx_ptr = mlx_init();
-	fdf->win_ptr = mlx_new_window(fdf->mlx_ptr, WINDOW_WIDTH, \
-			WINDOW_HEIGHT, "fdf");
-	fdf->img_ptr = img_init(fdf->mlx_ptr);
+	fdf->mlx = mlx_init(WINDOW_WIDTH, WINDOW_HEIGHT, "fdf", true);
+	if (!fdf->mlx)
+	{
+		free_points(fdf->map_data->points, fdf->map_data->max_m);
+		free(fdf->map_data);
+		free(fdf);
+		error_handler(3);
+	}
+	fdf->img_ptr = img_init(fdf->mlx);
 	fdf->cam_ptr = cam_init(fdf->map_data);
 	if (!fdf->img_ptr || !fdf->cam_ptr)
 		clean_up(&fdf);

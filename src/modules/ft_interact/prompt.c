@@ -11,58 +11,28 @@
 /* ************************************************************************** */
 #include "fdf.h"
 
-static char	*get_projection_type(t_fdf *fdf)
-{
-	char	*projection_name;
-
-	projection_name = "";
-	if (fdf->cam_ptr->projection == ISOMETRIC)
-		projection_name = "View Mode: Isometric View";
-	else if (fdf->cam_ptr->projection == PERSPECTIVE)
-		projection_name = "View Mode: Prospective View";
-	else if (fdf->cam_ptr->projection == TOP)
-		projection_name = "View Mode: Top View";
-	return (projection_name);
-}
-
-static void	subtitle(void *mlx, void *win, char *name)
-{
-	int	y;
-
-	y = 0;
-	mlx_string_put(mlx, win, 50, y += 50, DEFAULT_COLOUR, name);
-	mlx_string_put(mlx, win, 50, y += 25, DEFAULT_COLOUR, "ESC to exit");
-	mlx_string_put(mlx, win, 50, y += 25, DEFAULT_COLOUR, \
-			"Zoom in/out: press 'Page Up/Down'");
-	mlx_string_put(mlx, win, 50, y += 25, DEFAULT_COLOUR, \
-			"Move: press 'w'/'s' Up/Down");
-	mlx_string_put(mlx, win, 50, y += 25, DEFAULT_COLOUR, \
-			"Move: press 'a'/'d' Left/Right");
-	mlx_string_put(mlx, win, 50, y += 25, DEFAULT_COLOUR, \
-			"Rotate: press arrow key Rotate");
-	mlx_string_put(mlx, win, 50, y += 25, DEFAULT_COLOUR, \
-			"Bold: press '+'/'-' Thick/Think");
-	mlx_string_put(mlx, win, 50, y += 25, DEFAULT_COLOUR, \
-			"View: press 'i' Isometric View");
-	mlx_string_put(mlx, win, 50, y += 25, DEFAULT_COLOUR, \
-			"View: press 'p' Perspective View");
-	mlx_string_put(mlx, win, 50, y += 25, DEFAULT_COLOUR, \
-			"View: Top View: press 't'");
-	mlx_string_put(mlx, win, 50, y += 25, DEFAULT_COLOUR, \
-			"Colour: press 'Space'");
-	mlx_string_put(mlx, win, 50, y += 25, DEFAULT_COLOUR, "Reset: press 'R'");
-	return ;
-}
-
+// Create on-screen menu (called once at startup)
 void	print_menu(t_fdf *fdf)
 {
-	char	*projection_name;
-	void	*mlx;
-	void	*win;
+	static int	created = 0;
+	mlx_t		*mlx;
+	int			y;
 
-	mlx = fdf->mlx_ptr;
-	win = fdf->win_ptr;
-	projection_name = get_projection_type(fdf);
-	subtitle(mlx, win, projection_name);
-	return ;
+	if (created)
+		return ;
+	mlx = (mlx_t *)fdf->mlx;
+	y = 20;
+	mlx_put_string(mlx, "=== Controls ===", 10, y);
+	mlx_put_string(mlx, "ESC: Exit", 10, y += 20);
+	mlx_put_string(mlx, "PgUp/Dn: Zoom", 10, y += 20);
+	mlx_put_string(mlx, "W/S: Up/Down", 10, y += 20);
+	mlx_put_string(mlx, "A/D: Left/Right", 10, y += 20);
+	mlx_put_string(mlx, "Arrows: Rotate", 10, y += 20);
+	mlx_put_string(mlx, "=/-: Thickness", 10, y += 20);
+	mlx_put_string(mlx, "I: Isometric", 10, y += 20);
+	mlx_put_string(mlx, "P: Perspective", 10, y += 20);
+	mlx_put_string(mlx, "T: Top view", 10, y += 20);
+	mlx_put_string(mlx, "Space: Color", 10, y += 20);
+	mlx_put_string(mlx, "R: Reset", 10, y += 20);
+	created = 1;
 }
